@@ -12,6 +12,8 @@ TGETPUTDataThread *TAPI = new TGETPUTDataThread();
 TMainForm *MainForm;
 
 // ---------------------------------------------------------------------------
+// TMainForm class constructor
+// ---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
 	DragAcceptFiles(Handle, true);
 	Application->Icon = GetIcon("Folder");
@@ -20,14 +22,15 @@ __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
 	IL_FileIcon->Width = 16;
 	IL_FileIcon->Height = 16;
 
-	TAPI->OnAuthorize = OnAuthorize;
-	TAPI->OnMDataReady = OnMetadataReady;
-	TAPI->OnAInfoReady = OnAInfoReady;
-	TAPI->OnItemAdd = OnItemAdd;
-	TAPI->OnItemRemove = OnItemRemove;
-	TAPI->OnDeauthorize = OnDeauthorize;
-	TAPI->FOnShowMessage = OnShowMessage;
-	TAPI->OnSearchReady = OnSearchReady;
+	TAPI->OnAuthorize         = OnAuthorize;
+	TAPI->OnMDataReady        = OnMetadataReady;
+	TAPI->OnAInfoReady        = OnAInfoReady;
+	TAPI->OnItemAdd           = OnItemAdd;
+	TAPI->OnItemRemove        = OnItemRemove;
+	TAPI->OnDeauthorize       = OnDeauthorize;
+	TAPI->FOnShowMessage      = OnShowMessage;
+	TAPI->OnSearchReady       = OnSearchReady;
+
 	TAPI->ProgressDownloading = FileDownloadProgress;
 
 	Timer = new TTimer(this);
@@ -36,7 +39,10 @@ __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
 
 }
 
-void __fastcall TMainForm::OnShowMessage(UnicodeString Message) {
+// ---------------------------------------------------------------------------
+//   Events caused by TGETPUTDataThread
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::OnShowMessage(String Message) {
 	ShowMessage(Message);
 }
 
@@ -76,7 +82,7 @@ void __fastcall TMainForm::OnMetadataReady(Metadata *Mdata) {
 	Log::Msg("Loaded '" + Mdata->path + "' path from Dropbox ", FuncName);
 	if(Last_Hash != Mdata->hash) {
 		Last_Hash = Mdata->hash;
-		UnicodeString path = Mdata->path;
+		String path = Mdata->path;
 		Last_Path = path;
 
 		Lw->Items->BeginUpdate();
@@ -130,11 +136,34 @@ void __fastcall TMainForm::OnSearchReady(Metadata *Mdata) {
 }
 
 // ---------------------------------------------------------------------------
+void __fastcall TMainForm::OnItemAdd(Content * content) {
+	AddItem(content);
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::OnItemRemove(Content * content) {
+	RemoveItem(content);
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::OnDeauthorize() {
+	isAuthorized = false;
+	for (int i = 0; i < Lw->Items->Count; i++)
+		delete Lw->Items->Item[i]->Data;
+	Lw->Items->Clear();
+	OpenPanel(Left_P_BeforeAuth);
+	EDT_Path->Clear();
+	Last_Hash = "";
+}
+
+// ---------------------------------------------------------------------------
+//   Functions add and remove items to ListView
+// ---------------------------------------------------------------------------
 void __fastcall TMainForm::AddItem(Content *Data) {
 	TListItem *Item = Lw->Items->Add();
-	UnicodeString file_path = Data->path;
-	UnicodeString file_name = file_path.SubString(file_path.LastDelimiter("/") + 1, file_path.Length());
-	UnicodeString file_ext;
+	String file_path = Data->path;
+	String file_name = file_path.SubString(file_path.LastDelimiter("/") + 1, file_path.Length());
+	String file_ext;
 	Item->Caption = file_name;
 
 	Item->SubItems->Add(ConvertDateTime(Data->modified));
@@ -160,8 +189,8 @@ void __fastcall TMainForm::AddItem(Content *Data) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::RemoveItem(Content *Data) {
-	UnicodeString file_path = Data->path;
-	UnicodeString file_name = file_path.SubString(file_path.LastDelimiter("/") + 1, file_path.Length());
+	String file_path = Data->path;
+	String file_name = file_path.SubString(file_path.LastDelimiter("/") + 1, file_path.Length());
 	for(int i = 0; i < Lw->Items->Count; i++)
 		if(Lw->Items->Item[i]->Caption == file_name) {
 			delete Lw->Items->Item[i]->Data;
@@ -171,18 +200,9 @@ void __fastcall TMainForm::RemoveItem(Content *Data) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::OnDeauthorize() {
-	isAuthorized = false;
-	for (int i = 0; i < Lw->Items->Count; i++)
-		delete Lw->Items->Item[i]->Data;
-	Lw->Items->Clear();
-	OpenPanel(Left_P_BeforeAuth);
-	EDT_Path->Clear();
-	Last_Hash = "";
-}
-
+//   Function convert date time
 // ---------------------------------------------------------------------------
-UnicodeString __fastcall TMainForm::ConvertDateTime(UnicodeString DateTime) {
+String __fastcall TMainForm::ConvertDateTime(String DateTime) {
 	struct tm tm;
 	char time_fin[20];
 	strptime(AnsiString(DateTime).c_str(),
@@ -192,26 +212,47 @@ UnicodeString __fastcall TMainForm::ConvertDateTime(UnicodeString DateTime) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTN_LogoutMouseEnter(TObject *Sender) {
-	TColor Dest = ((TPanel*)Sender)->Color;
-	((TPanel*)Sender)->Color = ((TPanel*)Sender)->Font->Color;
-	((TPanel*)Sender)->Font->Color = Dest;
+//   Event handlers form
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::BTN_AuthClick(TObject *Sender) {
+	if (!isAuthorized) {
+		TAPI->Connect();
+	}
+	else
+		ClosePanel(Left_P_BeforeAuth);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::LwDblClick(TObject *Sender) {
-	if(Lw->ItemIndex != -1)
-		if (((Content*)Lw->Items->Item[Lw->ItemIndex]->Data)->is_dir)
-			TAPI->GetMetadata
-				(((Content*)Lw->Items->Item[Lw->ItemIndex]->Data)->path);
-		else
-			TAPI->OpenFile(((Content*)Lw->Items->Item[Lw->ItemIndex]->Data)->path);
+void __fastcall TMainForm::BTN_LogoutClick(TObject *Sender) {
+	if(isAuthorized) {
+		TAPI->Deauthorize();
+	}
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::BTN_UpdateClick(TObject *Sender) {
+	TAPI->GetMetadata(EDT_Path->Text);
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::BTN_UpClick(TObject *Sender) {
+	if (EDT_Path->Text != "/") {
+		String PrevFolder =
+			EDT_Path->Text.SubString(0, EDT_Path->Text.LastDelimiter("/") - 1);
+		Log::Msg("Load previous folder", FuncName);
+		TAPI->GetMetadata(PrevFolder);
+	}
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::LwClick(TObject *Sender) {
+	//TAPI->CreateFolder("/1 курс/Folder");
 }
 
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::BTN_BackwardClick(TObject *Sender) {
 	if (EDT_Path->Text != "/") {
-		UnicodeString PrevFolder =
+		String PrevFolder =
 			EDT_Path->Text.SubString(0, EDT_Path->Text.LastDelimiter("/") - 1);
 		Log::Msg("Load previous folder", FuncName);
 		TAPI->GetMetadata(PrevFolder);
@@ -223,51 +264,25 @@ void __fastcall TMainForm::BTN_BackwardClick(TObject *Sender) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::OnItemAdd(Content * content) {
-	AddItem(content);
+void __fastcall TMainForm::EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift) {
+	if(Key == VK_RETURN) {
+		TAPI->GetMetadata(EDT_Path->Text);
+	}
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::OnItemRemove(Content * content) {
-	RemoveItem(content);
+void __fastcall TMainForm::EDT_SearchKeyDown(TObject *Sender, WORD &Key,
+	TShiftState Shift) {
+	//if(EDT_Search->Text != "")
+		 if(Key == VK_RETURN)
+			TAPI->Search(EDT_Search->Text);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::GetIconFile(UnicodeString ext, TImageList *imgList) {
-	SHFILEINFO FileInfo;
-	if (ext == "Folder")
-		SHGetFileInfo(L"C://", FILE_ATTRIBUTE_DIRECTORY, &FileInfo,
-		sizeof(FileInfo),
-		SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
-	else if (ext != "Folder")
-		SHGetFileInfo(ext.w_str(), FILE_ATTRIBUTE_NORMAL, &FileInfo,
-		sizeof(FileInfo),
-		SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
-
-	TIcon* ico = new TIcon;
-	ico->Handle = FileInfo.hIcon;
-	int indx = imgList->AddIcon(ico);
-	if (indx != -1)
-		IconList->Insert(indx, ext);
-	delete ico;
-	Log::Msg(ext + " ico not available. Loaded", FuncName);
-}
-
-// ---------------------------------------------------------------------------
-TIcon* __fastcall TMainForm::GetIcon(UnicodeString ext) {
-	SHFILEINFO FileInfo;
-	if (ext == "Folder")
-		SHGetFileInfo(L"C://", FILE_ATTRIBUTE_DIRECTORY, &FileInfo,
-		sizeof(FileInfo),
-		SHGFI_ICON | SHGFI_LARGEICON | SHGFI_USEFILEATTRIBUTES);
-	else if (ext != "Folder")
-		SHGetFileInfo(ext.w_str(), FILE_ATTRIBUTE_NORMAL, &FileInfo,
-		sizeof(FileInfo),
-		SHGFI_ICON | SHGFI_LARGEICON | SHGFI_USEFILEATTRIBUTES);
-
-	TIcon* ico = new TIcon;
-	ico->Handle = FileInfo.hIcon;
-	return ico;
+void __fastcall TMainForm::BTN_LogoutMouseEnter(TObject *Sender) {
+	TColor Dest = ((TPanel*)Sender)->Color;
+	((TPanel*)Sender)->Color = ((TPanel*)Sender)->Font->Color;
+	((TPanel*)Sender)->Font->Color = Dest;
 }
 
 // ---------------------------------------------------------------------------
@@ -333,14 +348,85 @@ void __fastcall TMainForm::NavigateBTNMouseEnter(TObject *Sender) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTN_AuthClick(TObject *Sender) {
-	if (!isAuthorized) {
-		TAPI->Connect();
-	}
-	else
-		ClosePanel(Left_P_BeforeAuth);
+void __fastcall TMainForm::LwDragOver(TObject *Sender, TObject *Source, int X, int Y,
+		  TDragState State, bool &Accept) {
+	Accept = true;
 }
 
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::BTM_MainMouseEnter(TObject *Sender) {
+	((TPanel*)Sender)->BevelKind = bkFlat;
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::BTM_MainMouseLeave(TObject *Sender) {
+	((TPanel*)Sender)->BevelKind = bkNone;
+}
+
+// ---------------------------------------------------------------------------
+//   Get icon's and reload it
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::GetIconFile(String ext, TImageList *imgList) {
+	SHFILEINFO FileInfo;
+	if (ext == "Folder")
+		SHGetFileInfo(L"C://", FILE_ATTRIBUTE_DIRECTORY, &FileInfo,
+		sizeof(FileInfo),
+		SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
+	else if (ext != "Folder")
+		SHGetFileInfo(ext.w_str(), FILE_ATTRIBUTE_NORMAL, &FileInfo,
+		sizeof(FileInfo),
+		SHGFI_ICON | SHGFI_SMALLICON | SHGFI_USEFILEATTRIBUTES);
+
+	TIcon* ico = new TIcon;
+	ico->Handle = FileInfo.hIcon;
+	int indx = imgList->AddIcon(ico);
+	if (indx != -1)
+		IconList->Insert(indx, ext);
+	delete ico;
+	Log::Msg(ext + " ico not available. Loaded", FuncName);
+}
+
+// ---------------------------------------------------------------------------
+TIcon* __fastcall TMainForm::GetIcon(String ext) {
+	SHFILEINFO FileInfo;
+	if (ext == "Folder")
+		SHGetFileInfo(L"C://", FILE_ATTRIBUTE_DIRECTORY, &FileInfo,
+		sizeof(FileInfo),
+		SHGFI_ICON | SHGFI_LARGEICON | SHGFI_USEFILEATTRIBUTES);
+	else if (ext != "Folder")
+		SHGetFileInfo(ext.w_str(), FILE_ATTRIBUTE_NORMAL, &FileInfo,
+		sizeof(FileInfo),
+		SHGFI_ICON | SHGFI_LARGEICON | SHGFI_USEFILEATTRIBUTES);
+
+	TIcon* ico = new TIcon;
+	ico->Handle = FileInfo.hIcon;
+	return ico;
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::UpdateIcon() {
+
+	Log::Msg("Update navigate icon", FuncName);
+	BTN_Forward->Picture->Assign(NULL);
+	BTN_Backward->Picture->Assign(NULL);
+	if (__can_forward) {
+		IL_Navigate->GetIcon(3, BTN_Forward->Picture->Icon);
+	}
+	else {
+		IL_Navigate->GetIcon(5, BTN_Forward->Picture->Icon);
+	}
+	if (__can_backward) {
+		IL_Navigate->GetIcon(0, BTN_Backward->Picture->Icon);
+	}
+	else {
+		IL_Navigate->GetIcon(2, BTN_Backward->Picture->Icon);
+	}
+	BTN_Forward->Invalidate();
+	BTN_Backward->Invalidate();
+}
+
+// ---------------------------------------------------------------------------
+//   Open, close panel animation
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::ClosePanel(TPanel* Panel) {
 	Log::Msg("Close auth panel", FuncName);
@@ -373,47 +459,40 @@ void __fastcall TMainForm::OnTimer(TObject *Sender) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTN_LogoutClick(TObject *Sender) {
-	if(isAuthorized) {
-		TAPI->Deauthorize();
-	}
+//   On form destroy
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::FormDestroy(TObject *Sender) {
+	for(int i = 0; i < Lw->Items->Count; i++)
+		delete Lw->Items->Item[i]->Data;
+	TAPI->DestroyObject();
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::EDT_SearchKeyDown(TObject *Sender, WORD &Key,
-	TShiftState Shift) {
-	//if(EDT_Search->Text != "")
-		 if(Key == VK_RETURN)
-			TAPI->Search(EDT_Search->Text);
+//   Event's from action manager
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::OpenExecute(TObject *Sender)
+{
+	if(Lw->ItemIndex != -1)
+		if (((Content*)Lw->Selected->Data)->is_dir)
+			TAPI->GetMetadata
+				(((Content*)Lw->Selected->Data)->path);
+		else
+			TAPI->OpenFile(((Content*)Lw->Selected->Data)->path);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::DeleteExecute(TObject *Sender) {
+	if(Lw->ItemIndex != -1)
+		TAPI->DeletePath(((Content*)Lw->Selected->Data)->path);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMainForm::UpdateIcon() {
-
-	Log::Msg("Update navigate icon", FuncName);
-	BTN_Forward->Picture->Assign(NULL);
-	BTN_Backward->Picture->Assign(NULL);
-	if (__can_forward) {
-		IL_Navigate->GetIcon(3, BTN_Forward->Picture->Icon);
-	}
-	else {
-		IL_Navigate->GetIcon(5, BTN_Forward->Picture->Icon);
-	}
-	if (__can_backward) {
-		IL_Navigate->GetIcon(0, BTN_Backward->Picture->Icon);
-	}
-	else {
-		IL_Navigate->GetIcon(2, BTN_Backward->Picture->Icon);
-	}
-	BTN_Forward->Invalidate();
-	BTN_Backward->Invalidate();
-}
-
+// Function handles drag and drop in application
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::WmDropFiles(TWMDropFiles& Message) {
 	wchar_t buff[MAX_PATH];
-	UnicodeString file_path;
-	UnicodeString file_name;
+	String file_path;
+	String file_name;
 	HDROP hDrop = (HDROP)Message.Drop;
 	unsigned int file_count = DragQueryFile(hDrop, -1, NULL, NULL);
 
@@ -426,102 +505,18 @@ void __fastcall TMainForm::WmDropFiles(TWMDropFiles& Message) {
 	DragFinish(hDrop);
 }
 
-// ---------------------------------------------------------------------------
-void __fastcall TMainForm::FormDestroy(TObject *Sender) {
-	for(int i = 0; i < Lw->Items->Count; i++)
-		delete Lw->Items->Item[i]->Data;
-	TAPI->DestroyObject();
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::FormShow(TObject *Sender) {
+	Lw->SetFocus();
 }
-
-// ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTM_MainMouseEnter(TObject *Sender) {
-	((TPanel*)Sender)->BevelKind = bkFlat;
-}
-
-// ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTM_MainMouseLeave(TObject *Sender) {
-	((TPanel*)Sender)->BevelKind = bkNone;
-}
-
-// ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTN_UpdateClick(TObject *Sender) {
-	TAPI->GetMetadata(EDT_Path->Text);
-}
-
-// ---------------------------------------------------------------------------
-void __fastcall TMainForm::BTN_UpClick(TObject *Sender) {
-	if (EDT_Path->Text != "/") {
-		UnicodeString PrevFolder =
-			EDT_Path->Text.SubString(0, EDT_Path->Text.LastDelimiter("/") - 1);
-		Log::Msg("Load previous folder", FuncName);
-		TAPI->GetMetadata(PrevFolder);
-	}
-}
-
-// ---------------------------------------------------------------------------
 void __fastcall TMainForm::LwMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y)
 {
-	if(Button == mbRight && Lw->ItemIndex == -1)
-		Lw->PopupMenu->CloseMenu();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::OpenExecute(TObject *Sender)
-{
-	if(Lw->ItemIndex != -1)
-		if (((Content*)Lw->Selected->Data)->is_dir)
-			TAPI->GetMetadata
-				(((Content*)Lw->Selected->Data)->path);
-		else
-			TAPI->OpenFile(((Content*)Lw->Selected->Data)->path);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::FormShow(TObject *Sender)
-{
-	Lw->SetFocus();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::LwClick(TObject *Sender)
-{
-	//TAPI->CreateFolder("/1 курс/Folder");
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::DeleteExecute(TObject *Sender)
-{
-	if(Lw->ItemIndex != -1)
-		TAPI->DeletePath(((Content*)Lw->Selected->Data)->path);
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
-{
-	if(Key == VK_RETURN) {
-		TAPI->GetMetadata(EDT_Path->Text);
-    }
-}
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::LwDragOver(TObject *Sender, TObject *Source, int X, int Y,
-          TDragState State, bool &Accept)
-{
-	Accept = true;
-}
-//---------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-void __fastcall TMainForm::FormDragOver(TObject *Sender, TObject *Source, int X, int Y,
-          TDragState State, bool &Accept)
-{
-	Accept = true;
+	Lw->PopupMenu->CloseMenu();
+	if(Lw->ItemIndex != -1) {
+		Lw->PopupMenu = PP_Lw_ActionBar;
+	} else
+		Lw->PopupMenu = PP_Lw_ActionBar_Free;
 }
 //---------------------------------------------------------------------------
 

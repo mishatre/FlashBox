@@ -33,6 +33,7 @@
 #include <Data.Bind.ObjectScope.hpp>
 #include <IPPeerClient.hpp>
 #include <REST.Client.hpp>
+#include <Vcl.StdStyleActnCtrls.hpp>
 
 // ---------------------------------------------------------------------------
 
@@ -79,7 +80,7 @@ __published: // IDE-managed Components
 	TImageList *IL_UpdateBtn;
 	TPopupActionBar *PP_Lw_ActionBar;
 	TMenuItem *N1231;
-	TActionManager *ActionManager1;
+	TActionManager *ActionManager;
 	TMenuItem *N10;
 	TMenuItem *N11;
 	TMenuItem *N12;
@@ -97,35 +98,37 @@ __published: // IDE-managed Components
 	TSpeedButton *BTN_Update;
 	TTrayIcon *TrayIcon;
 	TPanel *Panel1;
+	TPopupActionBar *PP_Lw_ActionBar_Free;
+	TMenuItem *N1;
+	TMenuItem *N2;
 
 	void __fastcall BTN_LogoutMouseEnter(TObject *Sender);
-	void __fastcall LwDblClick(TObject *Sender);
 	void __fastcall BTN_BackwardClick(TObject *Sender);
-	void __fastcall NavigateBTNMouseLeave(TObject *Sender);
-	void __fastcall NavigateBTNMouseEnter(TObject *Sender);
-
-	void __fastcall BTN_AuthClick(TObject *Sender);
-	void __fastcall BTN_LogoutClick(TObject *Sender);
-	void __fastcall EDT_SearchKeyDown(TObject *Sender, WORD &Key,
-		TShiftState Shift);
-	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall BTM_MainMouseEnter(TObject *Sender);
 	void __fastcall BTM_MainMouseLeave(TObject *Sender);
 	void __fastcall BTN_UpdateClick(TObject *Sender);
 	void __fastcall BTN_UpClick(TObject *Sender);
+	void __fastcall BTN_AuthClick(TObject *Sender);
+	void __fastcall BTN_LogoutClick(TObject *Sender);
+
+	void __fastcall NavigateBTNMouseLeave(TObject *Sender);
+	void __fastcall NavigateBTNMouseEnter(TObject *Sender);
+
+	void __fastcall EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall EDT_SearchKeyDown(TObject *Sender, WORD &Key,
+		TShiftState Shift);
+
+	void __fastcall OpenExecute(TObject *Sender);
+	void __fastcall DeleteExecute(TObject *Sender);
+
+	void __fastcall LwClick(TObject *Sender);
+	void __fastcall LwDragOver(TObject *Sender, TObject *Source, int X, int Y, TDragState State,
+		  bool &Accept);
+
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall LwMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
-	void __fastcall OpenExecute(TObject *Sender);
-	void __fastcall FormShow(TObject *Sender);
-	void __fastcall LwClick(TObject *Sender);
-	void __fastcall DeleteExecute(TObject *Sender);
-	void __fastcall EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
-	void __fastcall LwDragOver(TObject *Sender, TObject *Source, int X, int Y, TDragState State,
-          bool &Accept);
-	void __fastcall FormDragOver(TObject *Sender, TObject *Source, int X, int Y, TDragState State,
-          bool &Accept);
-
-
 
 private: // User declarations
 	void __fastcall ClosePanel(TPanel* Panel);
@@ -134,7 +137,7 @@ private: // User declarations
 
 	void __fastcall AddItem(Content *Data);
 	void __fastcall RemoveItem(Content *Data);
-	UnicodeString __fastcall ConvertDateTime(UnicodeString DateTime);
+	String __fastcall ConvertDateTime(String DateTime);
 
 	void __fastcall OnAuthorize(bool Authorized);
 	void __fastcall OnMetadataReady(Metadata *Mdata);
@@ -142,11 +145,11 @@ private: // User declarations
 	void __fastcall OnAInfoReady(Account_Info *Ainfo);
 	void __fastcall OnItemAdd(Content * content);
 	void __fastcall OnItemRemove(Content * content);
-	void __fastcall GetIconFile(UnicodeString ext, TImageList *imgList);
+	void __fastcall GetIconFile(String ext, TImageList *imgList);
 	void __fastcall OnDeauthorize();
-	TIcon* __fastcall GetIcon(UnicodeString ext);
+	TIcon* __fastcall GetIcon(String ext);
 
-	void __fastcall OnShowMessage(UnicodeString Message);
+	void __fastcall OnShowMessage(String Message);
 
 	void __fastcall WmDropFiles(TWMDropFiles& Message);
 
@@ -155,8 +158,8 @@ private: // User declarations
 	TPanel* TimerP;
 	TStringList *IconList;
 	Metadata *LastMdata;
-	UnicodeString Last_Hash;
-	UnicodeString Last_Path;
+	String Last_Hash;
+	String Last_Path;
 
 	bool isAuthorized;
 	bool Searched;

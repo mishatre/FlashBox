@@ -37,11 +37,11 @@
 // ---------------------------------------------------------------------------
 
 struct Account_Info {
-	UnicodeString referral_link;
-	UnicodeString display_name;
-	UnicodeString locale;
-	UnicodeString country;
-	UnicodeString email;
+	String referral_link;
+	String display_name;
+	String locale;
+	String country;
+	String email;
 	bool          email_verified;
 	bool          is_paired;
 	int           uid;
@@ -52,46 +52,46 @@ struct Account_Info {
 		float normal;
 	} quota_info;
 	struct ndet {
-		UnicodeString familiar_name;
-		UnicodeString surname;
-		UnicodeString given_name;
+		String familiar_name;
+		String surname;
+		String given_name;
 	} name_details;
 
-	__fastcall Account_Info(UnicodeString JSONString);
+	__fastcall Account_Info(String JSONString);
 	__fastcall Account_Info();
 };
 
 struct Content {
-	UnicodeString rev;
-	UnicodeString path;
-	UnicodeString icon;
-	UnicodeString modified;
-	UnicodeString size;
-	UnicodeString root;
-	UnicodeString mime_type;
+	String rev;
+	String path;
+	String icon;
+	String modified;
+	String size;
+	String root;
+	String mime_type;
 	float         bytes;
 	float         revision;
 	bool          thumb_exists;
 	bool          is_dir;
 	bool          read_only;
 
-	__fastcall Content(UnicodeString JSONString);
+	__fastcall Content(String JSONString);
 	__fastcall Content();
 };
 
 struct Metadata {
-	UnicodeString hash;
-	UnicodeString path;
-	UnicodeString icon;
-	UnicodeString root;
-	UnicodeString size;
+	String hash;
+	String path;
+	String icon;
+	String root;
+	String size;
 	float         bytes;
 	bool          thumb_exists;
 	bool          is_dir;
 
 	std::vector<Content*>(Contents);
 
-	__fastcall Metadata(UnicodeString JSONString, bool OnlyContent = false);
+	__fastcall Metadata(String JSONString, bool OnlyContent = false);
 	__fastcall Metadata();
 };
 
@@ -117,7 +117,7 @@ enum TSetAction : unsigned int {
 	saSearch
 };
 
-const UnicodeString __TaskName[] = {
+const String __TaskName[] = {
 	"Get account info",
 	"Get metadata",
 	"Check access token",
@@ -132,8 +132,8 @@ const UnicodeString __TaskName[] = {
 };
 
 struct DataQueue {
-	UnicodeString Data[2];
-	UnicodeString TaskName;
+	String Data[2];
+	String TaskName;
 	TSetAction    Action;
 
 	TSetAction &operator = ( TSetAction &action ) {
@@ -150,7 +150,7 @@ typedef void __fastcall(__closure * TDropboxOnItemAdd      )(Content * content  
 typedef void __fastcall(__closure * TDropboxOnItemRemove   )(Content * content   );
 typedef void __fastcall(__closure * TDropboxOnDeauthorize  )(                    );
 typedef void __fastcall(__closure * TDropboxOnSearchReady  )(Metadata * MData    );
-typedef void __fastcall(__closure * TAPIShowMessage        )(UnicodeString Message);
+typedef void __fastcall(__closure * TAPIShowMessage        )(String Message);
 
 
 class TGETPUTDataThread : public TThread {
@@ -164,8 +164,8 @@ private:
 	TGauge                 *OProgress;
 	TEvent                 *AddTaskEvent;
 	TConfFile               Conf;
-	UnicodeString           TempDir;
-	UnicodeString           LastPath;
+	String           TempDir;
+	String           LastPath;
 	bool                  __isAuthorized;
 	bool                  __isThreadIdle;
 	bool                  __isInternetAvailable;
@@ -184,21 +184,21 @@ private:
 	TDropboxOnDeauthorize   FOnDeauthorize;
 	TDropboxOnSearchReady   FOnSearchReady;
 
-	void* __fastcall ResponseProcess(UnicodeString Response,
+	void* __fastcall ResponseProcess(String Response,
 		TReturnValue RValue);
-	void  __fastcall AddToQueue     (UnicodeString Agr1, UnicodeString Agr2,
+	void  __fastcall AddToQueue     (String Agr1, String Agr2,
 		TSetAction Action  );
-	void  __fastcall RemoveDirectory(UnicodeString dir);
+	void  __fastcall RemoveDirectory(String dir);
 
-	void  __fastcall WebFormOnBeforeRedirect(const System::UnicodeString AURL,
+	void  __fastcall WebFormOnBeforeRedirect(const System::String AURL,
 		bool &DoCloseWebView);
 
-	inline UnicodeString AuthorizeURL(UnicodeString URL) {
+	inline String AuthorizeURL(String URL) {
 		return (__isAuthorized == true && OAuth2->AccessToken != "") ?
-			URL + "?access_token=" + OAuth2->AccessToken : UnicodeString("");
+			URL + "?access_token=" + OAuth2->AccessToken : String("");
 	}
 
-	inline bool __fastcall StrToBool(UnicodeString Value) {
+	inline bool __fastcall StrToBool(String Value) {
 		return Value == "true" ? true : false;
 	}
 
@@ -241,23 +241,23 @@ private:
 
 	// Function's that called only from Execute
 	void __fastcall __GetAccountInfo();
-	void __fastcall __GetMetadata   (UnicodeString Path = "");
-	void __fastcall __Search        (UnicodeString SearchString);
+	void __fastcall __GetMetadata   (String Path = "");
+	void __fastcall __Search        (String SearchString);
 	void __fastcall __CheckAuthorize();
-	void __fastcall __CreateFolder  (UnicodeString Path);
-	void __fastcall __DeletePath    (UnicodeString Path);
-	void __fastcall __UploadFile    (UnicodeString SourcePath,
-		UnicodeString DestPath);
-	void __fastcall __OpenFile      (UnicodeString Path);
-	void __fastcall __MovePath      (UnicodeString FromPath,
-		UnicodeString ToPath);
-	void __fastcall __CopyPath      (UnicodeString FromPath,
-		UnicodeString ToPath);
+	void __fastcall __CreateFolder  (String Path);
+	void __fastcall __DeletePath    (String Path);
+	void __fastcall __UploadFile    (String SourcePath,
+		String DestPath);
+	void __fastcall __OpenFile      (String Path);
+	void __fastcall __MovePath      (String FromPath,
+		String ToPath);
+	void __fastcall __CopyPath      (String FromPath,
+		String ToPath);
 
 	void __fastcall __DisableAccessToken();
 	// ----------------------------------------
 
-	void __fastcall ShowMessage(UnicodeString Message);
+	void __fastcall ShowMessage(String Message);
 
 protected:
 	void __fastcall Execute();
@@ -269,17 +269,17 @@ public:
 	void __fastcall Connect       ();
 	void __fastcall Authorized    ();
 	void __fastcall GetAccountInfo();
-	void __fastcall Search        (UnicodeString SearchString);
-	void __fastcall GetMetadata   (UnicodeString Path = "");
-	void __fastcall OpenFile      (UnicodeString Path);
-	void __fastcall CreateFolder  (UnicodeString Path);
-	void __fastcall DeletePath    (UnicodeString Path);
-	void __fastcall UploadFile    (UnicodeString SourcePath,
-		UnicodeString DestPath);
-	void __fastcall MovePath      (UnicodeString FromPath,
-		UnicodeString ToPath);
-	void __fastcall CopyPath      (UnicodeString FromPath,
-		UnicodeString ToPath);
+	void __fastcall Search        (String SearchString);
+	void __fastcall GetMetadata   (String Path = "");
+	void __fastcall OpenFile      (String Path);
+	void __fastcall CreateFolder  (String Path);
+	void __fastcall DeletePath    (String Path);
+	void __fastcall UploadFile    (String SourcePath,
+		String DestPath);
+	void __fastcall MovePath      (String FromPath,
+		String ToPath);
+	void __fastcall CopyPath      (String FromPath,
+		String ToPath);
 
 	void __fastcall Deauthorize   ();
 

@@ -7,7 +7,7 @@
 #pragma comment(lib, "Wininet.lib")
 
 // ---------------------------------------------------------------------------
-// THREAD !!!
+// TGETPUTDataThread class constructor
 // ---------------------------------------------------------------------------
 __fastcall TGETPUTDataThread::TGETPUTDataThread() {
 
@@ -118,7 +118,7 @@ void __fastcall TGETPUTDataThread::Execute() {
 	}
 }
 
-void __fastcall TGETPUTDataThread::ShowMessage(UnicodeString Message) {
+void __fastcall TGETPUTDataThread::ShowMessage(String Message) {
 	Mrews->BeginRead();
 	FOnShowMessage(Message);
 	Mrews->EndRead();
@@ -167,10 +167,10 @@ void __fastcall TGETPUTDataThread::Connect() {
 // Processing response and extract access token
 // ---------------------------------------------------------------------------
 void __fastcall TGETPUTDataThread::WebFormOnBeforeRedirect
-	(const System::UnicodeString AURL, bool &DoCloseWebView) {
+	(const System::String AURL, bool &DoCloseWebView) {
 	int pos = AURL.Pos("#access_token=");
 	if (pos != 0) {
-		UnicodeString AccessToken =
+		String AccessToken =
 			AURL.SubString(pos + strlen("#access_token="), AURL.Length());
 		OAuth2->AccessToken = AccessToken.SubString(0,AccessToken.Pos("&") - 1);
 		Log::Msg("Access token received", WebForm->Name);
@@ -191,41 +191,41 @@ void __fastcall TGETPUTDataThread::GetAccountInfo() {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::GetMetadata(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::GetMetadata(String Path) {
 	AddToQueue(Path, "123", saMdata);
 	LastPath = Path;
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::UploadFile(UnicodeString SourcePath,
-	UnicodeString DestPath) {
+void __fastcall TGETPUTDataThread::UploadFile(String SourcePath,
+	String DestPath) {
 	AddToQueue(SourcePath, DestPath, saUpFile);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::OpenFile(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::OpenFile(String Path) {
 	AddToQueue(Path, "", saOpFile);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::CreateFolder(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::CreateFolder(String Path) {
 	AddToQueue(Path, "", saCreateFolder);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::MovePath(UnicodeString FromPath,
-		UnicodeString ToPath) {
+void __fastcall TGETPUTDataThread::MovePath(String FromPath,
+		String ToPath) {
 	AddToQueue(FromPath, ToPath, saMovePath);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::CopyPath(UnicodeString FromPath,
-		UnicodeString ToPath) {
+void __fastcall TGETPUTDataThread::CopyPath(String FromPath,
+		String ToPath) {
 	AddToQueue(FromPath, ToPath, saCopyPath);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::DeletePath(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::DeletePath(String Path) {
 	AddToQueue(Path, "", saDeletePath);
 }
 
@@ -235,14 +235,14 @@ void __fastcall TGETPUTDataThread::Deauthorize() {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::Search(UnicodeString SearchString) {
+void __fastcall TGETPUTDataThread::Search(String SearchString) {
 	AddToQueue(SearchString, "", saSearch);
 }
 
 // ---------------------------------------------------------------------------
 // Function handles the contents and returns the result as a structure
 // ---------------------------------------------------------------------------
-void* __fastcall TGETPUTDataThread::ResponseProcess(UnicodeString Response,
+void* __fastcall TGETPUTDataThread::ResponseProcess(String Response,
 	TReturnValue RValue) {
 	if (Response.Length() > 1) {
 		switch (RValue) {
@@ -262,8 +262,8 @@ void* __fastcall TGETPUTDataThread::ResponseProcess(UnicodeString Response,
 // ---------------------------------------------------------------------------
 // This function adds the task to the queue and clears it
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::AddToQueue(UnicodeString Agr1,
-	UnicodeString Agr2, TSetAction Action) {
+void __fastcall TGETPUTDataThread::AddToQueue(String Agr1,
+	String Agr2, TSetAction Action) {
 	try {
 		if(__isThreadIdle){
 			if(Queue.size() != 0) {
@@ -291,7 +291,7 @@ void __fastcall TGETPUTDataThread::AddToQueue(UnicodeString Agr1,
 // ---------------------------------------------------------------------------
 // Remove temporary directory
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::RemoveDirectory(UnicodeString dir) {
+void __fastcall TGETPUTDataThread::RemoveDirectory(String dir) {
 	Log::Msg("Remove temp folder", FuncName);
 	dir = "temp";
 	if (DirectoryExists(dir)) {
@@ -359,7 +359,7 @@ void __fastcall TGETPUTDataThread::__GetAccountInfo() {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__GetMetadata(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::__GetMetadata(String Path) {
 	if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
@@ -425,17 +425,17 @@ void __fastcall TGETPUTDataThread::__CheckAuthorize() {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__UploadFile(UnicodeString SourcePath,
-	UnicodeString DestPath) {
+void __fastcall TGETPUTDataThread::__UploadFile(String SourcePath,
+	String DestPath) {
 	if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
 	}
 	TFileStream *File = new TFileStream(SourcePath, fmOpenRead);
-	UnicodeString URL = Conf.Get("ApiContentURI") + Conf.Get("FilesPut") + DestPath;
+	String URL = Conf.Get("ApiContentURI") + Conf.Get("FilesPut") + DestPath;
 	URL = AuthorizeURL(IdHTTP->URL->URLEncode(URL));
 	try {
-		UnicodeString Response;
+		String Response;
 		Response = IdHTTP->Put(URL, File);
 		Log::Msg("File " + ExtractFileName(SourcePath) + " Uploaded.", FuncName);
 		File->Free();
@@ -452,11 +452,11 @@ void __fastcall TGETPUTDataThread::__UploadFile(UnicodeString SourcePath,
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__OpenFile(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::__OpenFile(String Path) {
 	Path = Path.SubString(2, Path.Length());
-	UnicodeString file_name = Path.SubString(Path.LastDelimiter("/") + 1,
+	String file_name = Path.SubString(Path.LastDelimiter("/") + 1,
 		Path.Length());
-	UnicodeString file_path = TempDir + file_name;
+	String file_path = TempDir + file_name;
 
 	if (!DirectoryExists(TempDir))
 		CreateDirectory(TempDir.c_str(), NULL);
@@ -466,7 +466,7 @@ void __fastcall TGETPUTDataThread::__OpenFile(UnicodeString Path) {
 			return;
 		}
 		TFileStream *File = new TFileStream(file_path, fmCreate);
-		UnicodeString URL = Conf.Get("ApiContentURI") + Conf.Get("FilesGet") + Path;
+		String URL = Conf.Get("ApiContentURI") + Conf.Get("FilesGet") + Path;
 
 		Log::Msg("File " + file_name + " doesn't exist. Dowloading...",
 			FuncName);
@@ -486,7 +486,7 @@ void __fastcall TGETPUTDataThread::__OpenFile(UnicodeString Path) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__CreateFolder(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::__CreateFolder(String Path) {
     if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
@@ -515,7 +515,7 @@ void __fastcall TGETPUTDataThread::__CreateFolder(UnicodeString Path) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__DeletePath(UnicodeString Path) {
+void __fastcall TGETPUTDataThread::__DeletePath(String Path) {
     if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
@@ -543,8 +543,8 @@ void __fastcall TGETPUTDataThread::__DeletePath(UnicodeString Path) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__MovePath(UnicodeString FromPath,
-	UnicodeString ToPath) {
+void __fastcall TGETPUTDataThread::__MovePath(String FromPath,
+	String ToPath) {
     if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
@@ -573,8 +573,8 @@ void __fastcall TGETPUTDataThread::__MovePath(UnicodeString FromPath,
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__CopyPath(UnicodeString FromPath,
-	UnicodeString ToPath) {
+void __fastcall TGETPUTDataThread::__CopyPath(String FromPath,
+	String ToPath) {
     if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
@@ -630,7 +630,7 @@ void __fastcall TGETPUTDataThread::__DisableAccessToken() {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TGETPUTDataThread::__Search(UnicodeString SearchString) {
+void __fastcall TGETPUTDataThread::__Search(String SearchString) {
 	if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
@@ -663,7 +663,7 @@ void __fastcall TGETPUTDataThread::__Search(UnicodeString SearchString) {
 __fastcall Content::Content() {}
 
 // ---------------------------------------------------------------------------
-__fastcall Content::Content(UnicodeString JSONString) {
+__fastcall Content::Content(String JSONString) {
 	TJSONObject *Obj = (TJSONObject*) TJSONObject::ParseJSONValue(JSONString);
 	for(int i = 0; i < Obj->Count; i++) {
 		if(Obj->Pairs[i]->JsonString->Value() == "rev")
@@ -696,7 +696,7 @@ __fastcall Content::Content(UnicodeString JSONString) {
 __fastcall Metadata::Metadata() {}
 
 // ---------------------------------------------------------------------------
-__fastcall Metadata::Metadata(UnicodeString JSONString, bool OnlyContent) {
+__fastcall Metadata::Metadata(String JSONString, bool OnlyContent) {
 	if(!OnlyContent) {
 		TJSONObject *Obj = (TJSONObject*) TJSONObject::ParseJSONValue(JSONString);
 		for(int i = 0; i < Obj->Count; i++) {
@@ -737,7 +737,7 @@ __fastcall Metadata::Metadata(UnicodeString JSONString, bool OnlyContent) {
 __fastcall Account_Info::Account_Info() {}
 
 // ---------------------------------------------------------------------------
-__fastcall Account_Info::Account_Info(UnicodeString JSONString){
+__fastcall Account_Info::Account_Info(String JSONString){
 	TJSONObject *Obj = (TJSONObject*) TJSONObject::ParseJSONValue(JSONString);
 
 	for(int i = 0; i < Obj->Count; i++) {

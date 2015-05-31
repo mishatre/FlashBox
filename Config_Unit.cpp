@@ -22,7 +22,7 @@ __fastcall TConfFile::TConfFile() {
 }
 
 // ---------------------------------------------------------------------------
-UnicodeString __fastcall TConfFile::Get(UnicodeString Name) {
+String __fastcall TConfFile::Get(String Name) {
 	if(Data != NULL) {
 		for(int i = 0; i < Data->Count; i++) {
 			if(Data->Pairs[i]->JsonString->Value() == Name)
@@ -33,7 +33,7 @@ UnicodeString __fastcall TConfFile::Get(UnicodeString Name) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TConfFile::Set(UnicodeString Name, UnicodeString Value) {
+void __fastcall TConfFile::Set(String Name, String Value) {
 	if(Data != NULL) {
 		if(Name == "")
 			return;

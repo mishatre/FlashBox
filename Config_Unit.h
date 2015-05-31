@@ -13,15 +13,15 @@ class TConfFile {
 	TJSONObject *Data;
 	TFileStream *ConfFile;
 	TStringStream *JSONString;
-	UnicodeString ConfFileName;
+	String ConfFileName;
 
 	void __fastcall LoadDefault();
 	void __fastcall SaveToFile();
 
 	public:
 
-	UnicodeString __fastcall Get(UnicodeString Name);
-	void __fastcall Set(UnicodeString Name, UnicodeString Value);
+	String __fastcall Get(String Name);
+	void __fastcall Set(String Name, String Value);
 
 
 

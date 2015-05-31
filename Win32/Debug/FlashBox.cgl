@@ -1,27 +1,27 @@
 Functions called:
  fflush (4 times)
- strftime (27 times)
- atol (135 times)
- stricmp (201 times)
- delete (70 times)
- memset (29 times)
- SysReallocMem (4877 times)
+ strftime (13 times)
+ atol (65 times)
+ stricmp (97 times)
+ delete (46 times)
+ memset (15 times)
+ SysReallocMem (3420 times)
  SysAllocMem (36 times)
- SysFreeMem (69007 times)
- SysGetMem (69154 times)
+ SysFreeMem (43070 times)
+ SysGetMem (43133 times)
  strdup (4 times)
  free (22 times)
  _lsetlocale (6 times)
- new (79 times)
+ new (55 times)
  calloc (10 times)
- strlen (148 times)
+ strlen (142 times)
  realloc (1 times)
  malloc (7 times)
- memcpy (239 times)
+ memcpy (224 times)
 Resource types used:
- object (79 allocs, 47 max)
- memory block (69212 allocs, 5354 max)
+ object (55 allocs, 46 max)
+ memory block (43191 allocs, 5312 max)
 Modules used:
- 00400000 05/31/2015 16:00:20
+ 00400000 05/31/2015 20:04:10
  E:\GitHubLocalRepo\FlashBox\Win32\Debug\FlashBox.exe
 ==========================================
