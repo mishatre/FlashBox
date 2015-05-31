@@ -97,7 +97,6 @@ __published: // IDE-managed Components
 	TSpeedButton *BTN_Update;
 	TTrayIcon *TrayIcon;
 	TPanel *Panel1;
-	TRESTClient *RESTClient1;
 
 	void __fastcall BTN_LogoutMouseEnter(TObject *Sender);
 	void __fastcall LwDblClick(TObject *Sender);
@@ -121,6 +120,11 @@ __published: // IDE-managed Components
 	void __fastcall LwClick(TObject *Sender);
 	void __fastcall DeleteExecute(TObject *Sender);
 	void __fastcall EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall LwDragOver(TObject *Sender, TObject *Source, int X, int Y, TDragState State,
+          bool &Accept);
+	void __fastcall FormDragOver(TObject *Sender, TObject *Source, int X, int Y, TDragState State,
+          bool &Accept);
+
 
 
 private: // User declarations
@@ -134,6 +138,7 @@ private: // User declarations
 
 	void __fastcall OnAuthorize(bool Authorized);
 	void __fastcall OnMetadataReady(Metadata *Mdata);
+	void __fastcall OnSearchReady(Metadata *Mdata);
 	void __fastcall OnAInfoReady(Account_Info *Ainfo);
 	void __fastcall OnItemAdd(Content * content);
 	void __fastcall OnItemRemove(Content * content);
@@ -149,9 +154,12 @@ private: // User declarations
 
 	TPanel* TimerP;
 	TStringList *IconList;
+	Metadata *LastMdata;
 	UnicodeString Last_Hash;
+	UnicodeString Last_Path;
 
 	bool isAuthorized;
+	bool Searched;
 
 	bool __can_forward;
 	bool __can_backward;

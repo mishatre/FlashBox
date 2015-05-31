@@ -91,7 +91,7 @@ struct Metadata {
 
 	std::vector<Content*>(Contents);
 
-	__fastcall Metadata(UnicodeString JSONString);
+	__fastcall Metadata(UnicodeString JSONString, bool OnlyContent = false);
 	__fastcall Metadata();
 };
 
@@ -99,7 +99,8 @@ enum TReturnValue : unsigned int {
 	rvAinfo,
 	rvMdata,
 	rvSdata,
-	rvContent
+	rvContent,
+	rvSearch
 };
 
 enum TSetAction : unsigned int {
@@ -112,7 +113,8 @@ enum TSetAction : unsigned int {
 	saMovePath,
 	saCopyPath,
 	saDeletePath,
-	saDeAuth
+	saDeAuth,
+	saSearch
 };
 
 const UnicodeString __TaskName[] = {
@@ -125,7 +127,8 @@ const UnicodeString __TaskName[] = {
 	"Move path",
 	"Copy path",
 	"Delete path",
-	"Disable access token"
+	"Disable access token",
+	"Search"
 };
 
 struct DataQueue {
@@ -146,6 +149,7 @@ typedef void __fastcall(__closure * TDropboxOnAuthorize    )(bool Authorized    
 typedef void __fastcall(__closure * TDropboxOnItemAdd      )(Content * content   );
 typedef void __fastcall(__closure * TDropboxOnItemRemove   )(Content * content   );
 typedef void __fastcall(__closure * TDropboxOnDeauthorize  )(                    );
+typedef void __fastcall(__closure * TDropboxOnSearchReady  )(Metadata * MData    );
 typedef void __fastcall(__closure * TAPIShowMessage        )(UnicodeString Message);
 
 
@@ -178,6 +182,7 @@ private:
 	TDropboxOnItemAdd       FOnItemAdd;
 	TDropboxOnItemRemove    FOnItemRemove;
 	TDropboxOnDeauthorize   FOnDeauthorize;
+	TDropboxOnSearchReady   FOnSearchReady;
 
 	void* __fastcall ResponseProcess(UnicodeString Response,
 		TReturnValue RValue);
@@ -237,6 +242,7 @@ private:
 	// Function's that called only from Execute
 	void __fastcall __GetAccountInfo();
 	void __fastcall __GetMetadata   (UnicodeString Path = "");
+	void __fastcall __Search        (UnicodeString SearchString);
 	void __fastcall __CheckAuthorize();
 	void __fastcall __CreateFolder  (UnicodeString Path);
 	void __fastcall __DeletePath    (UnicodeString Path);
@@ -263,6 +269,7 @@ public:
 	void __fastcall Connect       ();
 	void __fastcall Authorized    ();
 	void __fastcall GetAccountInfo();
+	void __fastcall Search        (UnicodeString SearchString);
 	void __fastcall GetMetadata   (UnicodeString Path = "");
 	void __fastcall OpenFile      (UnicodeString Path);
 	void __fastcall CreateFolder  (UnicodeString Path);
@@ -291,6 +298,8 @@ public:
 		write = FOnItemRemove};
 	__property TDropboxOnDeauthorize   OnDeauthorize = {
 		write = FOnDeauthorize};
+	__property TDropboxOnSearchReady   OnSearchReady = {
+		write = FOnSearchReady};
 
 	//
 

@@ -11,9 +11,6 @@
 TGETPUTDataThread *TAPI = new TGETPUTDataThread();
 TMainForm *MainForm;
 
-// 5
-// 325
-// 385
 // ---------------------------------------------------------------------------
 __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
 	DragAcceptFiles(Handle, true);
@@ -30,7 +27,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner) : TForm(Owner) {
 	TAPI->OnItemRemove = OnItemRemove;
 	TAPI->OnDeauthorize = OnDeauthorize;
 	TAPI->FOnShowMessage = OnShowMessage;
-
+	TAPI->OnSearchReady = OnSearchReady;
 	TAPI->ProgressDownloading = FileDownloadProgress;
 
 	Timer = new TTimer(this);
@@ -80,19 +77,14 @@ void __fastcall TMainForm::OnMetadataReady(Metadata *Mdata) {
 	if(Last_Hash != Mdata->hash) {
 		Last_Hash = Mdata->hash;
 		UnicodeString path = Mdata->path;
+		Last_Path = path;
 
 		Lw->Items->BeginUpdate();
-
-		for (int i = 0; i < Lw->Items->Count; i++) {
+		for (int i = 0; i < Lw->Items->Count; i++)
 			delete Lw->Items->Item[i]->Data;
-		}
-
 		Lw->Items->Clear();
-
-		for(unsigned int i = 0; i < Mdata->Contents.size(); i++) {
+		for(unsigned int i = 0; i < Mdata->Contents.size(); i++)
 			AddItem(Mdata->Contents[i]);
-        }
-
 		Lw->Items->EndUpdate();
 
 		if (Mdata->path == "/")
@@ -120,7 +112,21 @@ void __fastcall TMainForm::OnMetadataReady(Metadata *Mdata) {
         }
 	}
 	delete Mdata;
+}
 
+// ---------------------------------------------------------------------------
+void __fastcall TMainForm::OnSearchReady(Metadata *Mdata) {
+	Searched = true;
+	Lw->Items->BeginUpdate();
+	for (int i = 0; i < Lw->Items->Count; i++)
+		delete Lw->Items->Item[i]->Data;
+	Lw->Items->Clear();
+	for(unsigned int i = 0; i < Mdata->Contents.size(); i++)
+		AddItem(Mdata->Contents[i]);
+	Lw->Items->EndUpdate();
+	delete Mdata;
+	__can_backward = true;
+	UpdateIcon();
 }
 
 // ---------------------------------------------------------------------------
@@ -161,7 +167,7 @@ void __fastcall TMainForm::RemoveItem(Content *Data) {
 			delete Lw->Items->Item[i]->Data;
 			Lw->Items->Delete(i);
 		}
-
+	delete Data;
 }
 
 // ---------------------------------------------------------------------------
@@ -179,7 +185,6 @@ void __fastcall TMainForm::OnDeauthorize() {
 UnicodeString __fastcall TMainForm::ConvertDateTime(UnicodeString DateTime) {
 	struct tm tm;
 	char time_fin[20];
-
 	strptime(AnsiString(DateTime).c_str(),
 		"%a, %d %b %Y %H:%M:%S %z", &tm);
 	strftime(time_fin, 20, "%d.%m.%Y %H:%M", &tm);
@@ -210,6 +215,10 @@ void __fastcall TMainForm::BTN_BackwardClick(TObject *Sender) {
 			EDT_Path->Text.SubString(0, EDT_Path->Text.LastDelimiter("/") - 1);
 		Log::Msg("Load previous folder", FuncName);
 		TAPI->GetMetadata(PrevFolder);
+	} else if(Searched == true) {
+		Searched = false;
+		Last_Hash = "";
+		TAPI->GetMetadata(Last_Path);
 	}
 }
 
@@ -373,7 +382,9 @@ void __fastcall TMainForm::BTN_LogoutClick(TObject *Sender) {
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::EDT_SearchKeyDown(TObject *Sender, WORD &Key,
 	TShiftState Shift) {
-	// if (Key == VK_RETURN);
+	//if(EDT_Search->Text != "")
+		 if(Key == VK_RETURN)
+			TAPI->Search(EDT_Search->Text);
 }
 
 // ---------------------------------------------------------------------------
@@ -491,6 +502,26 @@ void __fastcall TMainForm::EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftSta
 	if(Key == VK_RETURN) {
 		TAPI->GetMetadata(EDT_Path->Text);
     }
+}
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::LwDragOver(TObject *Sender, TObject *Source, int X, int Y,
+          TDragState State, bool &Accept)
+{
+	Accept = true;
+}
+//---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+void __fastcall TMainForm::FormDragOver(TObject *Sender, TObject *Source, int X, int Y,
+          TDragState State, bool &Accept)
+{
+	Accept = true;
 }
 //---------------------------------------------------------------------------
 

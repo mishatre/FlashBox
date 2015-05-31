@@ -93,6 +93,9 @@ void __fastcall TGETPUTDataThread::Execute() {
 				case saDeAuth:
 					__DisableAccessToken();
 					break;
+				case saSearch:
+					__Search(Queue[i_count].Data[0]);
+					break;
 				}
 				Log::Msg("Task " + Queue[i_count].TaskName + " completed",
 					FuncName);
@@ -232,21 +235,25 @@ void __fastcall TGETPUTDataThread::Deauthorize() {
 }
 
 // ---------------------------------------------------------------------------
+void __fastcall TGETPUTDataThread::Search(UnicodeString SearchString) {
+	AddToQueue(SearchString, "", saSearch);
+}
+
+// ---------------------------------------------------------------------------
 // Function handles the contents and returns the result as a structure
 // ---------------------------------------------------------------------------
 void* __fastcall TGETPUTDataThread::ResponseProcess(UnicodeString Response,
 	TReturnValue RValue) {
 	if (Response.Length() > 1) {
 		switch (RValue) {
-		case rvAinfo: {
+		case rvAinfo:
 				return new Account_Info(Response);
-			}
-		case rvMdata: {
+		case rvMdata:
 				return new Metadata(Response);
-			}
-		case rvContent: {
+		case rvContent:
 				return new Content(Response);
-			}
+		case rvSearch:
+				return new Metadata(Response, true);
 		}
 	}
 	return NULL;
@@ -489,7 +496,7 @@ void __fastcall TGETPUTDataThread::__CreateFolder(UnicodeString Path) {
 		Request->Method = rmPOST;
 		Request->Resource = Conf.Get("CreateFolder");
 		Request->AddParameter("root","auto");
-		Request->AddParameter("path",Path, pkGETorPOST, option);
+		Request->AddParameter("path",IdHTTP->URL->ParamsEncode(Path),pkGETorPOST, option);
 		Request->Execute();
 		Log::Msg("Request Content given. Call function FOnItemAdd", FuncName);
 		if(FOnItemAdd != NULL) {
@@ -515,10 +522,10 @@ void __fastcall TGETPUTDataThread::__DeletePath(UnicodeString Path) {
 	}
 	try {
 		Client->BaseURL = Conf.Get("ApiBaseURI");
-		Request->Method = rmGET;
+		Request->Method = rmPOST;
 		Request->Resource = Conf.Get("Delete");
 		Request->AddParameter("root","auto");
-		Request->AddParameter("path", Path, pkGETorPOST, option);
+		Request->AddParameter("path", IdHTTP->URL->ParamsEncode(Path),pkGETorPOST, option);
 		Request->Execute();
 		Log::Msg("Request Content given. Call function FOnItemRemove", FuncName);
 		if(FOnItemRemove != NULL) {
@@ -547,8 +554,8 @@ void __fastcall TGETPUTDataThread::__MovePath(UnicodeString FromPath,
 		Request->Method = rmPOST;
 		Request->Resource = Conf.Get("Move");
 		Request->AddParameter("root","auto");
-		Request->AddParameter("from_path",FromPath, pkGETorPOST, option);
-		Request->AddParameter("to_path",ToPath, pkGETorPOST, option);
+		Request->AddParameter("from_path",IdHTTP->URL->ParamsEncode(FromPath),pkGETorPOST, option);
+		Request->AddParameter("to_path",IdHTTP->URL->ParamsEncode(ToPath),pkGETorPOST, option);
 		Request->Execute();
 		Log::Msg("Request Content given. Call function FOnItemRemove", FuncName);
 		if(FOnItemRemove != NULL) {
@@ -577,8 +584,8 @@ void __fastcall TGETPUTDataThread::__CopyPath(UnicodeString FromPath,
 		Request->Method = rmPOST;
 		Request->Resource = Conf.Get("Copy");
 		Request->AddParameter("root","auto");
-		Request->AddParameter("from_path",FromPath, pkGETorPOST, option);
-		Request->AddParameter("to_path",ToPath, pkGETorPOST, option);
+		Request->AddParameter("from_path",IdHTTP->URL->ParamsEncode(FromPath),pkGETorPOST, option);
+		Request->AddParameter("to_path",IdHTTP->URL->ParamsEncode(ToPath),pkGETorPOST, option);
 		Request->Execute();
 		Log::Msg("Request Content given. Call function FOnItemAdd", FuncName);
 		if(FOnItemAdd != NULL) {
@@ -597,7 +604,7 @@ void __fastcall TGETPUTDataThread::__CopyPath(UnicodeString FromPath,
 
 // ---------------------------------------------------------------------------
 void __fastcall TGETPUTDataThread::__DisableAccessToken() {
-    if(!__isInternetAvailable) {
+	if(!__isInternetAvailable) {
 		ShowMessage("The computer is not connected to the Internet");
 		return;
 	}
@@ -620,6 +627,34 @@ void __fastcall TGETPUTDataThread::__DisableAccessToken() {
 	} catch (Rest::Exception::ERESTException &exception) {
 		Log::Msg(exception.Message, FuncName,2);
 	}
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TGETPUTDataThread::__Search(UnicodeString SearchString) {
+	if(!__isInternetAvailable) {
+		ShowMessage("The computer is not connected to the Internet");
+		return;
+	}
+	if (FOnSearchReady != NULL) {
+		try {
+			Client->BaseURL = Conf.Get("ApiBaseURI");
+			Request->Method = rmPOST;
+			Request->Resource = Conf.Get("Search");
+			Request->AddParameter("query",IdHTTP->URL->ParamsEncode(SearchString),pkGETorPOST, option);
+			Request->Execute();
+			if(Response->StatusCode != 400) {
+				Log::Msg("Metadata given. Call function FOnMDataReady", FuncName);
+				Mrews->BeginWrite();
+				FOnSearchReady((Metadata*)ResponseProcess(Response->Content, rvSearch));
+				Mrews->EndWrite();
+			}
+		} catch (Rest::Exception::ERESTException &exception) {
+			Log::Msg(exception.Message, FuncName,2);
+		}
+	}
+	else
+		Log::Msg("Function FOnSearchReady not defined", FuncName, 3);
+	Request->Params->Clear();
 }
 
 // ---------------------------------------------------------------------------
@@ -656,37 +691,46 @@ __fastcall Content::Content(UnicodeString JSONString) {
 	}
 	Obj->Free();
 }
-// ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
 __fastcall Metadata::Metadata() {}
 
 // ---------------------------------------------------------------------------
-__fastcall Metadata::Metadata(UnicodeString JSONString) {
-	TJSONObject *Obj = (TJSONObject*) TJSONObject::ParseJSONValue(JSONString);
-	for(int i = 0; i < Obj->Count; i++) {
-		if(Obj->Pairs[i]->JsonString->Value() == "hash")
-			hash = Obj->Pairs[i]->JsonValue->Value();//
-		else if(Obj->Pairs[i]->JsonString->Value() == "thumb_exists")
-			thumb_exists = StrToBool(Obj->Pairs[i]->JsonValue->Value());//
-		else if(Obj->Pairs[i]->JsonString->Value() == "path")
-			path = Obj->Pairs[i]->JsonValue->Value();//
-		else if(Obj->Pairs[i]->JsonString->Value() == "is_dir")
-			is_dir = StrToBool(Obj->Pairs[i]->JsonValue->Value());//
-		else if(Obj->Pairs[i]->JsonString->Value() == "icon")
-			icon =  Obj->Pairs[i]->JsonValue->Value();//
-		else if(Obj->Pairs[i]->JsonString->Value() == "root")
-			root = Obj->Pairs[i]->JsonValue->Value();//
-		else if(Obj->Pairs[i]->JsonString->Value() == "size")
-			size = Obj->Pairs[i]->JsonValue->Value(); //
-		else if(Obj->Pairs[i]->JsonString->Value() == "contents") {
-			TJSONArray *Arr  = (TJSONArray*) TJSONObject::ParseJSONValue
-						(Obj->Pairs[i]->JsonValue->ToJSON());
-			for (int j = 0; j < Arr->Count; j++)
-				Contents.push_back(new Content(Arr->Items[j]->ToJSON()));
-			Arr->Free();
+__fastcall Metadata::Metadata(UnicodeString JSONString, bool OnlyContent) {
+	if(!OnlyContent) {
+		TJSONObject *Obj = (TJSONObject*) TJSONObject::ParseJSONValue(JSONString);
+		for(int i = 0; i < Obj->Count; i++) {
+			if(Obj->Pairs[i]->JsonString->Value() == "hash")
+				hash = Obj->Pairs[i]->JsonValue->Value();//
+			else if(Obj->Pairs[i]->JsonString->Value() == "thumb_exists")
+				thumb_exists = StrToBool(Obj->Pairs[i]->JsonValue->Value());//
+			else if(Obj->Pairs[i]->JsonString->Value() == "path")
+				path = Obj->Pairs[i]->JsonValue->Value();//
+			else if(Obj->Pairs[i]->JsonString->Value() == "is_dir")
+				is_dir = StrToBool(Obj->Pairs[i]->JsonValue->Value());//
+			else if(Obj->Pairs[i]->JsonString->Value() == "icon")
+				icon =  Obj->Pairs[i]->JsonValue->Value();//
+			else if(Obj->Pairs[i]->JsonString->Value() == "root")
+				root = Obj->Pairs[i]->JsonValue->Value();//
+			else if(Obj->Pairs[i]->JsonString->Value() == "size")
+				size = Obj->Pairs[i]->JsonValue->Value(); //
+			else if(Obj->Pairs[i]->JsonString->Value() == "contents") {
+				TJSONArray *Arr  = (TJSONArray*) TJSONObject::ParseJSONValue
+							(Obj->Pairs[i]->JsonValue->ToJSON());
+				for (int j = 0; j < Arr->Count; j++)
+					Contents.push_back(new Content(Arr->Items[j]->ToJSON()));
+				Arr->Free();
+			}
 		}
+		Obj->Free();
 	}
-	Obj->Free();
+	else {
+    	TJSONArray *Arr  = (TJSONArray*) TJSONObject::ParseJSONValue
+					(JSONString);
+		for (int j = 0; j < Arr->Count; j++)
+			Contents.push_back(new Content(Arr->Items[j]->ToJSON()));
+		Arr->Free();
+	}
 }
 
 // ---------------------------------------------------------------------------
