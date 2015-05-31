@@ -1,0 +1,29 @@
+22:28:16 - nt: Load DropboxAPI
+22:28:16 - ess token: Check internet connection
+22:28:16 - TPUTDataThread::Execute: First time start thread
+22:28:16 - on FOnAInfoReady: Add action to stack: Check access token
+22:28:16 - ess token: Check internet connection
+22:28:16 - ue, passed %d: Current task: Check access token
+22:28:16 - ter is not connected to the Internet: Check access token.
+22:28:17 - loadFile: Access token Valid.
+22:28:17 - enFile: Call function FOnAuthorize.
+22:28:17 - on FOnAInfoReady: Add action to stack: Get account info
+22:28:17 - on FOnAInfoReady: Add action to stack: Get metadata
+22:28:17 - sks: Task Check access token completed
+22:28:17 - ess token: Check internet connection
+22:28:17 - ue, passed %d: Current task: Get account info
+22:28:18 - etadata: Request Content given. Call function FOnAInfoReady
+22:28:18 - апка с файлами: Account info data recieved
+22:28:19 - : Close auth panel
+22:28:19 - sks: Task Get account info completed
+22:28:19 - ess token: Check internet connection
+22:28:19 - ue, passed %d: Current task: Get metadata
+22:28:19 - uthorize: Metadata given. Call function FOnMDataReady
+22:28:19 - %z: Loaded '/' path from Dropbox 
+22:28:19 - : Folder ico not available. Loaded
+22:28:19 - : Update navigate icon
+22:28:19 - sks: Task Get metadata completed
+22:28:19 - ess token: Check internet connection
+22:28:19 - et connection: 3 operations in the queue, passed 3
+22:28:19 - w: The thread enters the waiting for new tasks
+22:28:20 - on FOnAInfoReady not defined: Remove temp folder

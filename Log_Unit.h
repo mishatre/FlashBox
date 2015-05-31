@@ -1,51 +1,35 @@
-// ---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
-#ifndef LogUnitH
-#define LogUnitH
-#include <System.Classes.hpp>
-#include <typeinfo>
-
-#define CName typeid(this).name()
+#ifndef Log_UnitH
+#define Log_UnitH
 #define FuncName __FUNC__
+//---------------------------------------------------------------------------
+#include <REST.Exception.hpp>
 
-class Log {
-private:
-	static TFormatSettings FormatSettings;
+class TLog {
+	private:
+	String LogPath;
+	String LogFileName;
+	TFileStream *LogFile;
+	TStringStream *MessageStr;
+	TFormatSettings FormatSettings;
+	bool Enabled;
 
-	static UnicodeString _LogFileName;
-	static UnicodeString _LineFormat;
-	static UnicodeString _FilePath;
-	static TFileStream *_LogFile;
+	void __fastcall CreateLogFile(String FileName);
+	String __fastcall FormatMessage(UnicodeString Message, UnicodeString ClassName, int Type = 0);
 
-	static TFileStream *SeparateLogFile;
-	static UnicodeString SeparateLogPath;
+	public:
 
-	static bool Enabled;
-	static bool SeparateLog;
+	void __fastcall Msg(UnicodeString Message, UnicodeString ClassName);
+	void __fastcall Msg(System::Sysutils::Exception &exception, UnicodeString ClassName);
+	void __fastcall Msg(Rest::Exception::ERESTException &exception, UnicodeString ClassName);
 
-	// static UnicodeString __fastcall getLineFormat();
-	// static void __fastcall setLineFormat(UnicodeString LineFormat);
-	static UnicodeString __fastcall LogLineFormat(UnicodeString Message);
+	void __fastcall EnableLog();
+	void __fastcall DisableLog();
+	__fastcall TLog();
+	__fastcall ~TLog();
 
-	// __property String LineFormat = {read = getLineFormat, write = setLineFormat};
-	public :
-
-	__fastcall Log();
-	static bool __fastcall CreateLogFile();
-	static void __fastcall SaveLogFile();
-	static void __fastcall Msg(UnicodeString Message, UnicodeString ClassName,
-		int Type = 1);
-	static void __fastcall SeparateMsg(UnicodeString Message, UnicodeString ClassName,
-		int Type = 1);
-	static void __fastcall Delimiter();
-	// 1 - System Message
-	// 2 - Exceptions
-	// 3 - Errors
-	//
-	static bool __fastcall StartLog();
-	static bool __fastcall StopLog();
-	static void __fastcall EnableSeparateLog();
 };
-// ---------------------------------------------------------------------------
-#endif
 
+extern TLog Log;
+#endif

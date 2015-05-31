@@ -1,0 +1,29 @@
+22:31:57 - TGETPUTDataThread::TGETPUTDataThread: Load DropboxAPI
+22:31:57 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+22:31:57 - TGETPUTDataThread::Execute: First time start thread
+22:31:57 - TGETPUTDataThread::AddToQueue: Add action to stack: Check access token
+22:31:57 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+22:31:57 - TGETPUTDataThread::Execute: Current task: Check access token
+22:31:57 - TGETPUTDataThread::__CheckAuthorize: Check access token.
+22:31:58 - TGETPUTDataThread::__CheckAuthorize: Access token Valid.
+22:31:58 - TGETPUTDataThread::__CheckAuthorize: Call function FOnAuthorize.
+22:31:58 - TGETPUTDataThread::AddToQueue: Add action to stack: Get account info
+22:31:58 - TGETPUTDataThread::AddToQueue: Add action to stack: Get metadata
+22:31:58 - TGETPUTDataThread::Execute: Task Check access token completed
+22:31:58 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+22:31:58 - TGETPUTDataThread::Execute: Current task: Get account info
+22:31:59 - TGETPUTDataThread::__GetAccountInfo: Request Content given. Call function FOnAInfoReady
+22:31:59 - TMainForm::OnAInfoReady: Account info data recieved
+22:31:59 - TMainForm::ClosePanel: Close auth panel
+22:31:59 - TGETPUTDataThread::Execute: Task Get account info completed
+22:31:59 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+22:31:59 - TGETPUTDataThread::Execute: Current task: Get metadata
+22:31:59 - TGETPUTDataThread::__GetMetadata: Metadata given. Call function FOnMDataReady
+22:31:59 - TMainForm::OnMetadataReady: Loaded '/' path from Dropbox 
+22:31:59 - TMainForm::GetIconFile: Folder ico not available. Loaded
+22:31:59 - TMainForm::UpdateIcon: Update navigate icon
+22:31:59 - TGETPUTDataThread::Execute: Task Get metadata completed
+22:31:59 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+22:31:59 - TGETPUTDataThread::Execute: 3 operations in the queue, passed 3
+22:31:59 - TGETPUTDataThread::Execute: The thread enters the waiting for new tasks
+22:32:00 - TGETPUTDataThread::RemoveDirectoryW: Remove temp folder

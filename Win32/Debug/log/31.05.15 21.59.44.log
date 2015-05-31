@@ -1,0 +1,24 @@
+21:59:44 - TGETPUTDataThread::TGETPUTDataThread: Load DropboxAPI
+21:59:44 - TGETPUTDataThread::Execute: First time start thread
+21:59:44 - TGETPUTDataThread::AddToQueue: Add action to stack: Check access token
+21:59:44 - TGETPUTDataThread::Execute: Current task: Check access token
+21:59:44 - TGETPUTDataThread::__CheckAuthorize: Check access token.
+21:59:45 - TGETPUTDataThread::__CheckAuthorize: Access token Valid.
+21:59:45 - TGETPUTDataThread::__CheckAuthorize: Call function FOnAuthorize.
+21:59:45 - TGETPUTDataThread::AddToQueue: Add action to stack: Get account info
+21:59:45 - TGETPUTDataThread::AddToQueue: Add action to stack: Get metadata
+21:59:45 - TGETPUTDataThread::Execute: Task Check access token completed
+21:59:45 - TGETPUTDataThread::Execute: Current task: Get account info
+21:59:46 - TGETPUTDataThread::__GetAccountInfo: Request Content given. Call function FOnAInfoReady
+21:59:46 - TMainForm::OnAInfoReady: Account info data recieved
+21:59:46 - TMainForm::ClosePanel: Close auth panel
+21:59:46 - TGETPUTDataThread::Execute: Task Get account info completed
+21:59:46 - TGETPUTDataThread::Execute: Current task: Get metadata
+21:59:46 - TGETPUTDataThread::__GetMetadata: Metadata given. Call function FOnMDataReady
+21:59:46 - TMainForm::OnMetadataReady: Loaded '/' path from Dropbox 
+21:59:46 - TMainForm::GetIconFile: Folder ico not available. Loaded
+21:59:46 - TMainForm::UpdateIcon: Update navigate icon
+21:59:46 - TGETPUTDataThread::Execute: Task Get metadata completed
+21:59:46 - TGETPUTDataThread::Execute: 3 operations in the stack, passed 3
+21:59:46 - TGETPUTDataThread::Execute: The thread enters the waiting for new tasks
+21:59:48 - TGETPUTDataThread::RemoveDirectoryW: Remove temp folder

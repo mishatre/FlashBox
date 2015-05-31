@@ -5,10 +5,10 @@ Functions called:
  stricmp (97 times)
  delete (46 times)
  memset (15 times)
- SysReallocMem (3420 times)
+ SysReallocMem (3074 times)
  SysAllocMem (36 times)
- SysFreeMem (43070 times)
- SysGetMem (43133 times)
+ SysFreeMem (42742 times)
+ SysGetMem (42803 times)
  strdup (4 times)
  free (22 times)
  _lsetlocale (6 times)
@@ -20,8 +20,8 @@ Functions called:
  memcpy (224 times)
 Resource types used:
  object (55 allocs, 46 max)
- memory block (43191 allocs, 5312 max)
+ memory block (42861 allocs, 5268 max)
 Modules used:
- 00400000 05/31/2015 20:04:10
+ 00400000 05/31/2015 22:31:58
  E:\GitHubLocalRepo\FlashBox\Win32\Debug\FlashBox.exe
 ==========================================

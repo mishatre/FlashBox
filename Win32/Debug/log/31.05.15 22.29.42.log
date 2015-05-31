@@ -1,0 +1,29 @@
+22:29:42 - TGETPUTDataThread::TGETPUTDataThread 15: Load DropboxAPI
+22:29:42 - TGETPUTDataThread::CheckInternetConnection 128: Check internet connection
+22:29:42 - TGETPUTDataThread::Execute 57: First time start thread
+22:29:42 - TGETPUTDataThread::AddToQueue 277: Add action to stack: Check access token
+22:29:42 - TGETPUTDataThread::CheckInternetConnection 128: Check internet connection
+22:29:42 - TGETPUTDataThread::Execute 63: Current task: Check access token
+22:29:42 - TGETPUTDataThread::__CheckAuthorize 391: Check access token.
+22:29:43 - TGETPUTDataThread::__CheckAuthorize 410: Access token Valid.
+22:29:43 - TGETPUTDataThread::__CheckAuthorize 418: Call function FOnAuthorize.
+22:29:43 - TGETPUTDataThread::AddToQueue 277: Add action to stack: Get account info
+22:29:43 - TGETPUTDataThread::AddToQueue 277: Add action to stack: Get metadata
+22:29:43 - TGETPUTDataThread::Execute 100: Task Check access token completed
+22:29:43 - TGETPUTDataThread::CheckInternetConnection 128: Check internet connection
+22:29:43 - TGETPUTDataThread::Execute 63: Current task: Get account info
+22:29:44 - TGETPUTDataThread::__GetAccountInfo 347: Request Content given. Call function FOnAInfoReady
+22:29:44 - TMainForm::OnAInfoReady 74: Account info data recieved
+22:29:44 - TMainForm::ClosePanel 431: Close auth panel
+22:29:44 - TGETPUTDataThread::Execute 100: Task Get account info completed
+22:29:44 - TGETPUTDataThread::CheckInternetConnection 128: Check internet connection
+22:29:44 - TGETPUTDataThread::Execute 63: Current task: Get metadata
+22:29:44 - TGETPUTDataThread::__GetMetadata 372: Metadata given. Call function FOnMDataReady
+22:29:44 - TMainForm::OnMetadataReady 81: Loaded '/' path from Dropbox 
+22:29:44 - TMainForm::GetIconFile 385: Folder ico not available. Loaded
+22:29:44 - TMainForm::UpdateIcon 408: Update navigate icon
+22:29:44 - TGETPUTDataThread::Execute 100: Task Get metadata completed
+22:29:44 - TGETPUTDataThread::CheckInternetConnection 128: Check internet connection
+22:29:44 - TGETPUTDataThread::Execute 105: 3 operations in the queue, passed 3
+22:29:44 - TGETPUTDataThread::Execute 107: The thread enters the waiting for new tasks
+22:29:45 - TGETPUTDataThread::RemoveDirectoryW 293: Remove temp folder

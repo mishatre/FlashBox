@@ -18,7 +18,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int) {
 		Application->Run();
 	}
 	catch (System::Sysutils::Exception &exception) {
-		//Log::Msg(exception.Message, 2);
+		Log.Msg(exception, FuncName);
 		Application->ShowException(&exception);
 	}
 	catch (...) {
@@ -26,7 +26,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int) {
 			throw System::Sysutils::Exception("");
 		}
 		catch (System::Sysutils::Exception &exception) {
-			//Log::Msg(exception.Message, 2);
+			Log.Msg(exception.Message, FuncName);
 			Application->ShowException(&exception);
 
 		}

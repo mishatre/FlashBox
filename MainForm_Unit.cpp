@@ -8,9 +8,9 @@
 #pragma package(smart_init)
 #pragma link "SHDocVw_OCX"
 #pragma resource "*.dfm"
+#pragma once
 TGETPUTDataThread *TAPI = new TGETPUTDataThread();
 TMainForm *MainForm;
-
 // ---------------------------------------------------------------------------
 // TMainForm class constructor
 // ---------------------------------------------------------------------------
@@ -72,14 +72,14 @@ void __fastcall TMainForm::OnAInfoReady(Account_Info *Ainfo) {
 
 	this->Caption = ExtractFilePath(Application->ExeName) + "Dropbox";
 	EDT_Path->Text = "/Dropbox";
-	Log::Msg("Account info data recieved", FuncName);
+	Log.Msg("Account info data recieved", FuncName);
 	ClosePanel(Left_P_BeforeAuth);
 	delete Ainfo;
 }
 
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::OnMetadataReady(Metadata *Mdata) {
-	Log::Msg("Loaded '" + Mdata->path + "' path from Dropbox ", FuncName);
+	Log.Msg("Loaded '" + Mdata->path + "' path from Dropbox ", FuncName);
 	if(Last_Hash != Mdata->hash) {
 		Last_Hash = Mdata->hash;
 		String path = Mdata->path;
@@ -239,7 +239,7 @@ void __fastcall TMainForm::BTN_UpClick(TObject *Sender) {
 	if (EDT_Path->Text != "/") {
 		String PrevFolder =
 			EDT_Path->Text.SubString(0, EDT_Path->Text.LastDelimiter("/") - 1);
-		Log::Msg("Load previous folder", FuncName);
+		Log.Msg("Load previous folder", FuncName);
 		TAPI->GetMetadata(PrevFolder);
 	}
 }
@@ -254,7 +254,7 @@ void __fastcall TMainForm::BTN_BackwardClick(TObject *Sender) {
 	if (EDT_Path->Text != "/") {
 		String PrevFolder =
 			EDT_Path->Text.SubString(0, EDT_Path->Text.LastDelimiter("/") - 1);
-		Log::Msg("Load previous folder", FuncName);
+		Log.Msg("Load previous folder", FuncName);
 		TAPI->GetMetadata(PrevFolder);
 	} else if(Searched == true) {
 		Searched = false;
@@ -383,7 +383,7 @@ void __fastcall TMainForm::GetIconFile(String ext, TImageList *imgList) {
 	if (indx != -1)
 		IconList->Insert(indx, ext);
 	delete ico;
-	Log::Msg(ext + " ico not available. Loaded", FuncName);
+	Log.Msg(ext + " ico not available. Loaded", FuncName);
 }
 
 // ---------------------------------------------------------------------------
@@ -406,7 +406,7 @@ TIcon* __fastcall TMainForm::GetIcon(String ext) {
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::UpdateIcon() {
 
-	Log::Msg("Update navigate icon", FuncName);
+	Log.Msg("Update navigate icon", FuncName);
 	BTN_Forward->Picture->Assign(NULL);
 	BTN_Backward->Picture->Assign(NULL);
 	if (__can_forward) {
@@ -429,7 +429,7 @@ void __fastcall TMainForm::UpdateIcon() {
 //   Open, close panel animation
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::ClosePanel(TPanel* Panel) {
-	Log::Msg("Close auth panel", FuncName);
+	Log.Msg("Close auth panel", FuncName);
 	TimerP = Panel;
 	Timer->Interval = 1;
 	Timer->OnTimer = OnTimer;
@@ -439,7 +439,7 @@ void __fastcall TMainForm::ClosePanel(TPanel* Panel) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TMainForm::OpenPanel(TPanel* Panel) {
-	Log::Msg("Open auth panel", FuncName);
+	Log.Msg("Open auth panel", FuncName);
 	TimerP = Panel;
 	Timer->Interval = 1;
 	Timer->OnTimer = OnTimer;

@@ -11,8 +11,8 @@
 // ---------------------------------------------------------------------------
 __fastcall TGETPUTDataThread::TGETPUTDataThread() {
 
-	Log::StartLog();
-	Log::Msg("Load DropboxAPI", FuncName);
+	Log.EnableLog();
+	Log.Msg("Load DropboxAPI", FuncName);
 
 	AddTaskEvent = new TEvent(NULL, false, false, "AddTaskEvent", false);
 
@@ -54,14 +54,13 @@ __fastcall TGETPUTDataThread::TGETPUTDataThread() {
 void __fastcall TGETPUTDataThread::Execute() {
 	try {
 		__isThreadIdle = true;
+		Log.Msg("First time start thread", FuncName);
 		AddTaskEvent->WaitFor(INT_MAX);
-		Log::Delimiter();
-		Log::Msg("First time start thread", FuncName);
 		unsigned int i_count = 0;
 		while (!Terminated) {
 			CheckInternetConnection();
 			if (i_count < Queue.size()) {
-				Log::Msg("Current task: " + Queue[i_count].TaskName, FuncName);
+				Log.Msg("Current task: " + Queue[i_count].TaskName, FuncName);
 				switch (Queue[i_count].Action) {
 				case saAinfo:
 					__GetAccountInfo();
@@ -97,24 +96,22 @@ void __fastcall TGETPUTDataThread::Execute() {
 					__Search(Queue[i_count].Data[0]);
 					break;
 				}
-				Log::Msg("Task " + Queue[i_count].TaskName + " completed",
+				Log.Msg("Task " + Queue[i_count].TaskName + " completed",
 					FuncName);
 				i_count++;
 			} else if (Queue.size() == i_count) {
-				Log::Delimiter();
 				TVarRec args[2] = {Queue.size(), i_count};
-				Log::Msg(Format("%d operations in the stack, passed %d", args, 2),
+				Log.Msg(Format("%d operations in the queue, passed %d", args, 2),
 					FuncName);
 				i_count = 0;
-				Log::Msg("The thread enters the waiting for new tasks", FuncName);
-				Log::Delimiter();
+				Log.Msg("The thread enters the waiting for new tasks", FuncName);
 				__isThreadIdle = true;
 				AddTaskEvent->ResetEvent();
 				AddTaskEvent->WaitFor(INT_MAX);
 			}
 		}
 	} catch (System::Sysutils::Exception &exception) {
-		Log::Msg(exception.Message, FuncName, 2);
+		Log.Msg(exception, FuncName);
 	}
 }
 
@@ -128,6 +125,7 @@ void __fastcall TGETPUTDataThread::ShowMessage(String Message) {
 // Check internet connection
 // ---------------------------------------------------------------------------
 void __fastcall TGETPUTDataThread::CheckInternetConnection() {
+	Log.Msg("Check internet connection",FuncName);
 	if(InternetCheckConnection(L"https://www.google.com",FLAG_ICC_FORCE_CONNECTION,0))
 		__isInternetAvailable = true;
 	else
@@ -143,22 +141,22 @@ void __fastcall TGETPUTDataThread::Connect() {
 		return;
 	}
 	if (!__isAuthorized) {
-		Log::Msg("Open WebForm. Try get access token", WebForm->Name);
+		Log.Msg("Open WebForm. Try get access token", WebForm->Name);
 		WebForm->OnAfterRedirect = WebFormOnBeforeRedirect;
 		try {
 			WebForm->ShowWithURL(OAuth2->AuthorizationRequestURI());
 		} catch (Rest::Exception::ERESTException &exception) {
 			ShowMessage(exception.Message);
-			Log::Msg(exception.Message, WebForm->Name, 2);
+			Log.Msg(exception, WebForm->Name);
 		}
 		if (OAuth2->AccessToken != "") {
 			Conf.Set("Access-Token", OAuth2->AccessToken);
 			__isAuthorized = true;
 			if(FOnAuthorize != NULL) {
-				Log::Msg("Call function FOnAuthorize.", FuncName);
+				Log.Msg("Call function FOnAuthorize.", FuncName);
 				FOnAuthorize(__isAuthorized);
 			} else
-				Log::Msg("Function FOnAuthorize not defined", FuncName, 3);
+				Log.Msg("Function FOnAuthorize not defined", FuncName);
 		}
 	}
 }
@@ -173,7 +171,7 @@ void __fastcall TGETPUTDataThread::WebFormOnBeforeRedirect
 		String AccessToken =
 			AURL.SubString(pos + strlen("#access_token="), AURL.Length());
 		OAuth2->AccessToken = AccessToken.SubString(0,AccessToken.Pos("&") - 1);
-		Log::Msg("Access token received", WebForm->Name);
+		Log.Msg("Access token received", WebForm->Name);
 		DoCloseWebView = true;
 	}
 }
@@ -267,7 +265,7 @@ void __fastcall TGETPUTDataThread::AddToQueue(String Agr1,
 	try {
 		if(__isThreadIdle){
 			if(Queue.size() != 0) {
-				Log::Msg("Clear stack", FuncName);
+				Log.Msg("Clear stack", FuncName);
 				Queue.clear();
 			}
 		}
@@ -276,7 +274,7 @@ void __fastcall TGETPUTDataThread::AddToQueue(String Agr1,
 		queue_elem.Data[1] = Agr2;
 		queue_elem = Action;
 		Queue.push_back(queue_elem);
-		Log::Msg("Add action to stack: " + queue_elem.TaskName, FuncName);
+		Log.Msg("Add action to stack: " + queue_elem.TaskName, FuncName);
 
 		if(__isThreadIdle){
 			__isThreadIdle = false;
@@ -284,7 +282,7 @@ void __fastcall TGETPUTDataThread::AddToQueue(String Agr1,
 		}
 	}
 	catch(System::Sysutils::Exception &exception) {
-		Log::Msg(exception.Message, FuncName,2);
+		Log.Msg(exception, FuncName);
 	}
 }
 
@@ -292,7 +290,7 @@ void __fastcall TGETPUTDataThread::AddToQueue(String Agr1,
 // Remove temporary directory
 // ---------------------------------------------------------------------------
 void __fastcall TGETPUTDataThread::RemoveDirectory(String dir) {
-	Log::Msg("Remove temp folder", FuncName);
+	Log.Msg("Remove temp folder", FuncName);
 	dir = "temp";
 	if (DirectoryExists(dir)) {
 		PCZZTSTR pFrom = dir.c_str();
@@ -302,7 +300,7 @@ void __fastcall TGETPUTDataThread::RemoveDirectory(String dir) {
 			0, NULL};
 		int error_code = SHFileOperation(&file_op);
 		if (error_code != 0)
-			Log::Msg("Delete temp directory returned with error code - " +
+			Log.Msg("Delete temp directory returned with error code - " +
 			IntToStr(error_code), FuncName);
 	}
 }
@@ -311,17 +309,18 @@ void __fastcall TGETPUTDataThread::RemoveDirectory(String dir) {
 // Destroy the component of class
 // ---------------------------------------------------------------------------
 void __fastcall TGETPUTDataThread::DestroyObject() {
-	//TDropBoxConf::SaveToFile("");
 	RemoveDirectory(TempDir);
+	this->Terminate();
+	AddTaskEvent->SetEvent();
+	AddTaskEvent->Free();
+
 	WebForm->Free();
 	OAuth2->Free();
 	Client->Free();
 	Request->Free();
 	Response->Free();
 	IdHTTP->Free();
-	this->Terminate();
-	AddTaskEvent->SetEvent();
-	AddTaskEvent->Free();
+
 	Queue.clear();
 	this->Free();
 }
@@ -345,17 +344,17 @@ void __fastcall TGETPUTDataThread::__GetAccountInfo() {
 			Request->Method = rmGET;
 			Request->Resource = Conf.Get("AccountInfo");
 			Request->Execute();
-			Log::Msg("Request Content given. Call function FOnAInfoReady", FuncName);
+			Log.Msg("Request Content given. Call function FOnAInfoReady", FuncName);
 			Mrews->BeginWrite();
 			FOnAInfoReady((Account_Info*)ResponseProcess(Response->Content,
 				rvAinfo));
 			Mrews->EndWrite();
 		} catch (Rest::Exception::ERESTException &exception) {
-			Log::Msg(exception.Message, FuncName,2);
+			Log.Msg(exception, FuncName);
 		}
 	}
 	else
-		Log::Msg("Function FOnAInfoReady not defined", FuncName, 3);
+		Log.Msg("Function FOnAInfoReady not defined", FuncName);
 }
 
 // ---------------------------------------------------------------------------
@@ -370,16 +369,16 @@ void __fastcall TGETPUTDataThread::__GetMetadata(String Path) {
 			Request->Method = rmGET;
 			Request->Resource = Conf.Get("Metadata") + Path;
 			Request->Execute();
-			Log::Msg("Metadata given. Call function FOnMDataReady", FuncName);
+			Log.Msg("Metadata given. Call function FOnMDataReady", FuncName);
 			Mrews->BeginWrite();
 			FOnMDataReady((Metadata*)ResponseProcess(Response->Content, rvMdata));
 			Mrews->EndWrite();
 		} catch (Rest::Exception::ERESTException &exception) {
-			Log::Msg(exception.Message, FuncName,2);
+			Log.Msg(exception, FuncName);
 		}
 	}
 	else
-		Log::Msg("Function FOnMDataReady not defined", FuncName, 3);
+		Log.Msg("Function FOnMDataReady not defined", FuncName);
 }
 
 // ---------------------------------------------------------------------------
@@ -389,7 +388,7 @@ void __fastcall TGETPUTDataThread::__CheckAuthorize() {
 		return;
 	}
 	if (FOnAuthorize != NULL) {
-		Log::Msg("Check access token.", FuncName);
+		Log.Msg("Check access token.", FuncName);
 		if (OAuth2->AccessToken != "") {
 			TJSONObject *Obj;
 			try {
@@ -400,28 +399,28 @@ void __fastcall TGETPUTDataThread::__CheckAuthorize() {
 				Obj = (TJSONObject*) TJSONObject::ParseJSONValue
 					(TEncoding::ASCII->GetBytes(Response->Content), 0);
 			} catch (Rest::Exception::ERESTException &exception) {
-				Log::Msg(exception.Message, FuncName, 2);
+				Log.Msg(exception, FuncName);
 			}
 
 			if (Obj->ToJSON().Pos("error") != 0) {
-				Log::Msg(Obj->Get("error")->JsonValue->Value(), FuncName);
+				Log.Msg(Obj->Get("error")->JsonValue->Value(), FuncName);
 				__isAuthorized = false;
 			} else {
 				OAuth2->AccessToken = Conf.Get("Access-Token");
-				Log::Msg("Access token Valid.", FuncName);
+				Log.Msg("Access token Valid.", FuncName);
 				__isAuthorized = true;
 			}
 			Obj->Free();
 		} else {
-			Log::Msg("No access token in config file", FuncName);
+			Log.Msg("No access token in config file", FuncName);
 			__isAuthorized = false;
 		}
-		Log::Msg("Call function FOnAuthorize.", FuncName);
+		Log.Msg("Call function FOnAuthorize.", FuncName);
 		Mrews->BeginWrite();
 		FOnAuthorize(__isAuthorized);
 		Mrews->EndWrite();
 	} else
-		Log::Msg("Function FOnAuthorize not defined", FuncName, 3);
+		Log.Msg("Function FOnAuthorize not defined", FuncName);
 }
 
 // ---------------------------------------------------------------------------
@@ -437,7 +436,7 @@ void __fastcall TGETPUTDataThread::__UploadFile(String SourcePath,
 	try {
 		String Response;
 		Response = IdHTTP->Put(URL, File);
-		Log::Msg("File " + ExtractFileName(SourcePath) + " Uploaded.", FuncName);
+		Log.Msg("File " + ExtractFileName(SourcePath) + " Uploaded.", FuncName);
 		File->Free();
 		if(FOnItemAdd != NULL) {
 			Mrews->BeginWrite();
@@ -445,9 +444,9 @@ void __fastcall TGETPUTDataThread::__UploadFile(String SourcePath,
 			Mrews->EndWrite();
 		}
 		else
-			Log::Msg("Function FOnItemAdd not defined", FuncName, 3);
+			Log.Msg("Function FOnItemAdd not defined", FuncName);
 	} catch (System::Sysutils::Exception &exception) {
-		Log::Msg(exception.Message, FuncName, 2);
+		Log.Msg(exception, FuncName);
 	}
 }
 
@@ -468,20 +467,20 @@ void __fastcall TGETPUTDataThread::__OpenFile(String Path) {
 		TFileStream *File = new TFileStream(file_path, fmCreate);
 		String URL = Conf.Get("ApiContentURI") + Conf.Get("FilesGet") + Path;
 
-		Log::Msg("File " + file_name + " doesn't exist. Dowloading...",
+		Log.Msg("File " + file_name + " doesn't exist. Dowloading...",
 			FuncName);
 		URL = AuthorizeURL(IdHTTP->URL->URLEncode(URL));
 		try {
 			IdHTTP->Get(URL, File);
-			Log::Msg("File " + ExtractFileName(file_path) + " downloaded.",
+			Log.Msg("File " + ExtractFileName(file_path) + " downloaded.",
 				FuncName);
 		} catch (System::Sysutils::Exception &exception) {
-			Log::Msg(exception.Message, FuncName, 2);
+			Log.Msg(exception, FuncName);
 		}
 		File->Free();
 	} else
-		Log::Msg("File " + file_name + " exist.", FuncName);
-	Log::Msg("File " + file_name + " open", FuncName);
+		Log.Msg("File " + file_name + " exist.", FuncName);
+	Log.Msg("File " + file_name + " open", FuncName);
 	ShellExecute(NULL, NULL, file_path.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
@@ -498,7 +497,7 @@ void __fastcall TGETPUTDataThread::__CreateFolder(String Path) {
 		Request->AddParameter("root","auto");
 		Request->AddParameter("path",IdHTTP->URL->ParamsEncode(Path),pkGETorPOST, option);
 		Request->Execute();
-		Log::Msg("Request Content given. Call function FOnItemAdd", FuncName);
+		Log.Msg("Request Content given. Call function FOnItemAdd", FuncName);
 		if(FOnItemAdd != NULL) {
 			Mrews->BeginWrite();
 			FOnItemAdd((Content*)ResponseProcess(Response->Content,
@@ -506,10 +505,10 @@ void __fastcall TGETPUTDataThread::__CreateFolder(String Path) {
 			Mrews->EndWrite();
 		}
 		else
-			Log::Msg("Function FOnItemAdd not defined", FuncName, 3);
+			Log.Msg("Function FOnItemAdd not defined", FuncName);
 
 	} catch (Rest::Exception::ERESTException &exception) {
-		Log::Msg(exception.Message, FuncName,2);
+		Log.Msg(exception, FuncName);
 	}
 	Request->Params->Clear();
 }
@@ -527,7 +526,7 @@ void __fastcall TGETPUTDataThread::__DeletePath(String Path) {
 		Request->AddParameter("root","auto");
 		Request->AddParameter("path", IdHTTP->URL->ParamsEncode(Path),pkGETorPOST, option);
 		Request->Execute();
-		Log::Msg("Request Content given. Call function FOnItemRemove", FuncName);
+		Log.Msg("Request Content given. Call function FOnItemRemove", FuncName);
 		if(FOnItemRemove != NULL) {
 			Mrews->BeginWrite();
 			FOnItemRemove((Content*)ResponseProcess(Response->Content,
@@ -535,9 +534,9 @@ void __fastcall TGETPUTDataThread::__DeletePath(String Path) {
 			Mrews->EndWrite();
 		}
 		else
-			Log::Msg("Function FOnItemRemove not defined", FuncName, 3);
+			Log.Msg("Function FOnItemRemove not defined", FuncName);
 	} catch (Rest::Exception::ERESTException &exception) {
-		Log::Msg(exception.Message, FuncName,2);
+		Log.Msg(exception, FuncName);
 	}
 	Request->Params->Clear();
 }
@@ -557,7 +556,7 @@ void __fastcall TGETPUTDataThread::__MovePath(String FromPath,
 		Request->AddParameter("from_path",IdHTTP->URL->ParamsEncode(FromPath),pkGETorPOST, option);
 		Request->AddParameter("to_path",IdHTTP->URL->ParamsEncode(ToPath),pkGETorPOST, option);
 		Request->Execute();
-		Log::Msg("Request Content given. Call function FOnItemRemove", FuncName);
+		Log.Msg("Request Content given. Call function FOnItemRemove", FuncName);
 		if(FOnItemRemove != NULL) {
 			Mrews->BeginWrite();
 			FOnItemRemove((Content*)ResponseProcess(Response->Content,
@@ -565,9 +564,9 @@ void __fastcall TGETPUTDataThread::__MovePath(String FromPath,
 			Mrews->EndWrite();
 		}
 		else
-			Log::Msg("Function FOnItemRemove not defined", FuncName, 3);
+			Log.Msg("Function FOnItemRemove not defined", FuncName);
 	} catch (Rest::Exception::ERESTException &exception) {
-		Log::Msg(exception.Message, FuncName,2);
+		Log.Msg(exception, FuncName);
 	}
 	Request->Params->Clear();
 }
@@ -587,7 +586,7 @@ void __fastcall TGETPUTDataThread::__CopyPath(String FromPath,
 		Request->AddParameter("from_path",IdHTTP->URL->ParamsEncode(FromPath),pkGETorPOST, option);
 		Request->AddParameter("to_path",IdHTTP->URL->ParamsEncode(ToPath),pkGETorPOST, option);
 		Request->Execute();
-		Log::Msg("Request Content given. Call function FOnItemAdd", FuncName);
+		Log.Msg("Request Content given. Call function FOnItemAdd", FuncName);
 		if(FOnItemAdd != NULL) {
 			Mrews->BeginWrite();
 			FOnItemAdd((Content*)ResponseProcess(Response->Content,
@@ -595,9 +594,9 @@ void __fastcall TGETPUTDataThread::__CopyPath(String FromPath,
 			Mrews->EndWrite();
 		}
 		else
-			Log::Msg("Function FOnItemAdd not defined", FuncName, 3);
+			Log.Msg("Function FOnItemAdd not defined", FuncName);
 	} catch (Rest::Exception::ERESTException &exception) {
-		Log::Msg(exception.Message, FuncName,2);
+		Log.Msg(exception, FuncName);
 	}
 	Request->Params->Clear();
 }
@@ -613,7 +612,7 @@ void __fastcall TGETPUTDataThread::__DisableAccessToken() {
 		Request->Method = rmPOST;
 		Request->Resource = Conf.Get("DisableToken");
 		Request->Execute();
-		Log::Msg("Access token disabled. Call function FOnDeauthorize", FuncName);
+		Log.Msg("Access token disabled. Call function FOnDeauthorize", FuncName);
 		Conf.Set("Access-Token", "");
 		OAuth2->AccessToken = "";
 		if (FOnDeauthorize != NULL) {
@@ -622,10 +621,10 @@ void __fastcall TGETPUTDataThread::__DisableAccessToken() {
             Mrews->EndWrite();
 		}
 		else
-			Log::Msg("Function FOnDeauthorize not defined", FuncName, 3);
+			Log.Msg("Function FOnDeauthorize not defined", FuncName);
 
 	} catch (Rest::Exception::ERESTException &exception) {
-		Log::Msg(exception.Message, FuncName,2);
+		Log.Msg(exception, FuncName);
 	}
 }
 
@@ -643,17 +642,17 @@ void __fastcall TGETPUTDataThread::__Search(String SearchString) {
 			Request->AddParameter("query",IdHTTP->URL->ParamsEncode(SearchString),pkGETorPOST, option);
 			Request->Execute();
 			if(Response->StatusCode != 400) {
-				Log::Msg("Metadata given. Call function FOnMDataReady", FuncName);
+				Log.Msg("Metadata given. Call function FOnMDataReady", FuncName);
 				Mrews->BeginWrite();
 				FOnSearchReady((Metadata*)ResponseProcess(Response->Content, rvSearch));
 				Mrews->EndWrite();
 			}
 		} catch (Rest::Exception::ERESTException &exception) {
-			Log::Msg(exception.Message, FuncName,2);
+			Log.Msg(exception, FuncName);
 		}
 	}
 	else
-		Log::Msg("Function FOnSearchReady not defined", FuncName, 3);
+		Log.Msg("Function FOnSearchReady not defined", FuncName);
 	Request->Params->Clear();
 }
 

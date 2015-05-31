@@ -1,0 +1,3 @@
+21:58:53 - TGETPUTDataThread::TGETPUTDataThread: Load DropboxAPI
+21:58:55 - TGETPUTDataThread::RemoveDirectoryW: Remove temp folder
+21:58:55 - TGETPUTDataThread::Execute: First time start thread
