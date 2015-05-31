@@ -1,0 +1,123 @@
+Error 00001. 0x300010 (Thread 0x48F8):
+Resource leak: The object (0x2728180) was never deleted
+
+The object (0x02728180) [size: 40 bytes] was created with new
+Call Tree:
+   0x004082BB(=FlashBox.exe:0x01:0072BB) DropboxAPI_Unit.cpp#248
+   0x0040CBF0(=FlashBox.exe:0x01:00BBF0) DropboxAPI_Unit.cpp#526
+   0x00406966(=FlashBox.exe:0x01:005966) DropboxAPI_Unit.cpp#91
+   0x004F1718(=FlashBox.exe:0x01:0F0718)
+   0x00430E62(=FlashBox.exe:0x01:02FE62)
+   0x74F07C04(=KERNEL32.DLL:0x01:007C04)
+   0x776DAD1F(=ntdll.dll:0x01:059D1F)
+   0x776DACEA(=ntdll.dll:0x01:059CEA)
+
+------------------------------------------
+Functions called:
+ fflush (4 times)
+ strftime (19 times)
+ atol (95 times)
+ stricmp (163 times)
+ delete (53 times)
+ memset (21 times)
+ SysReallocMem (4403 times)
+ SysAllocMem (36 times)
+ SysFreeMem (49652 times)
+ SysGetMem (49758 times)
+ strdup (4 times)
+ free (22 times)
+ _lsetlocale (6 times)
+ new (63 times)
+ calloc (10 times)
+ strlen (148 times)
+ realloc (1 times)
+ malloc (7 times)
+ memcpy (236 times)
+Resource types used:
+ object (63 allocs, 52 max)
+ memory block (49816 allocs, 6485 max)
+Modules used:
+ 002C0000 03/19/2015 01:55:00 D:\Program Files
+ (x86)\Embarcadero\Studio\16.0\bin\bordbk220N.dll
+ 00400000 05/30/2015 03:54:42 E:\Диплом\FlashBox
+ v0.1.1\Win32\Debug\FlashBox.exe
+ 0CD00000 08/30/2014 01:55:00 D:\Program Files
+ (x86)\Embarcadero\Studio\15.0\bin\CG32.DLL
+ 50030000 08/30/2014 01:55:00 D:\Program Files
+ (x86)\Embarcadero\Studio\15.0\bin\borlndmm.DLL
+ 5DFD0000 03/06/2015 05:43:22 C:\Windows\system32\wpdshext.dll
+ 6C790000 10/29/2014 03:44:18 C:\Windows\SYSTEM32\thumbcache.dll
+ 6C880000 10/29/2014 04:29:06 C:\Windows\SYSTEM32\dlnashext.dll
+ 6CB40000 10/29/2014 03:30:16 C:\Windows\System32\PlayToDevice.dll
+ 6CF20000 10/29/2014 04:05:04 C:\Windows\SYSTEM32\ondemandconnroutehelper.dll
+ 6F660000 01/29/2015 21:34:46 C:\Windows\SYSTEM32\WindowsCodecs.dll
+ 6FC60000 10/29/2014 04:02:56 C:\Windows\System32\DevDispItemProvider.dll
+ 71CF0000 10/29/2014 06:15:38 C:\Windows\SYSTEM32\NTASN1.dll
+ 71D20000 10/29/2014 04:06:22 C:\Windows\SYSTEM32\DPAPI.DLL
+ 720D0000 10/29/2014 05:00:14 C:\Windows\SYSTEM32\apphelp.dll
+ 72830000 10/31/2014 05:26:40 C:\Windows\SYSTEM32\actxprxy.dll
+ 72EF0000 04/21/2015 19:04:38 C:\Windows\SYSTEM32\iertutil.dll
+ 733B0000 10/29/2014 06:15:38 C:\Windows\system32\ncryptsslp.dll
+ 733D0000 05/01/2015 01:48:30 C:\Windows\SYSTEM32\schannel.dll
+ 73480000 10/29/2014 03:59:36
+ C:\Windows\WinSxS\x86_microsoft.windows.gdiplus_6595b64144ccf1df_1.1.9600.174
+15_none_dad8722c5bcc2d8f\gdiplus.dll
+ 73610000 10/29/2014 06:10:08 C:\Windows\SYSTEM32\WINSTA.dll
+ 73660000 10/29/2014 04:05:34 C:\Windows\System32\rasadhlp.dll
+ 73670000 10/29/2014 03:56:32 C:\Windows\SYSTEM32\Fwpuclnt.dll
+ 73850000 10/29/2014 06:15:32 C:\Windows\SYSTEM32\gpapi.dll
+ 73870000 10/29/2014 06:15:38 C:\Windows\SYSTEM32\ncrypt.dll
+ 73890000 10/29/2014 04:06:20 C:\Windows\SYSTEM32\SECUR32.DLL
+ 738A0000 10/29/2014 06:10:56 C:\Windows\SYSTEM32\PROPSYS.dll
+ 739E0000 10/29/2014 04:05:48 C:\Windows\SYSTEM32\bcrypt.dll
+ 73A00000 10/29/2014 06:15:38 C:\Windows\system32\rsaenh.dll
+ 73A30000 10/29/2014 06:15:32 C:\Windows\SYSTEM32\CRYPTSP.dll
+ 73A80000 10/29/2014 04:06:28 C:\Windows\SYSTEM32\DNSAPI.dll
+ 73B00000 10/29/2014 04:06:18 C:\Windows\system32\mswsock.dll
+ 73B50000 10/29/2014 03:56:22 C:\Windows\SYSTEM32\WINHTTP.DLL
+ 73C60000 10/29/2014 06:18:48 C:\Windows\SYSTEM32\kernel.appcore.dll
+ 73DA0000 10/29/2014 06:12:04 C:\Windows\system32\dwmapi.dll
+ 73E30000 04/21/2015 18:02:02 C:\Windows\SYSTEM32\WININET.DLL
+ 74010000 10/29/2014 06:05:16 C:\Windows\SYSTEM32\profapi.dll
+ 740A0000 10/29/2014 06:05:16 C:\Windows\SYSTEM32\WINNSI.DLL
+ 74160000 10/29/2014 06:07:02 C:\Windows\SYSTEM32\WINMMBASE.dll
+ 74190000 10/29/2014 03:58:06 C:\Windows\SYSTEM32\OLEACC.DLL
+ 74290000 10/29/2014 03:48:30 C:\Windows\system32\uxtheme.dll
+ 74710000 03/27/2015 06:21:34
+ C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.
+9600.17784_none_a9f497a901334c74\COMCTL32.DLL
+ 74930000 10/29/2014 06:15:38 C:\Windows\SYSTEM32\USERENV.dll
+ 74950000 10/29/2014 06:07:02 C:\Windows\SYSTEM32\WINMM.DLL
+ 74980000 10/29/2014 03:59:48 C:\Windows\SYSTEM32\webio.dll
+ 74A10000 10/29/2014 06:05:16 C:\Windows\SYSTEM32\iphlpapi.dll
+ 74BD0000 01/23/2015 08:02:34 C:\Windows\SYSTEM32\shcore.dll
+ 74D60000 10/29/2014 06:18:42 C:\Windows\SYSTEM32\DEVOBJ.dll
+ 74D90000 10/29/2014 03:45:18 C:\Windows\SYSTEM32\WINSPOOL.DRV
+ 74E00000 10/29/2014 06:10:56 C:\Windows\SYSTEM32\VERSION.DLL
+ 74E10000 10/29/2014 06:15:38 C:\Windows\SYSTEM32\bcryptPrimitives.dll
+ 74E70000 10/29/2014 06:05:16 C:\Windows\SYSTEM32\CRYPTBASE.dll
+ 74E80000 10/29/2014 04:06:06 C:\Windows\SYSTEM32\SspiCli.dll
+ 74EA0000 10/29/2014 06:05:16 C:\Windows\SYSTEM32\WS2_32.DLL
+ 74EF0000 10/29/2014 04:58:24 C:\Windows\SYSTEM32\KERNEL32.DLL
+ 75030000 10/29/2014 06:06:30 C:\Windows\SYSTEM32\msvcrt.dll
+ 75100000 10/29/2014 05:03:16 C:\Windows\SYSTEM32\KERNELBASE.dll
+ 751E0000 10/29/2014 06:10:02 C:\Windows\SYSTEM32\clbcatq.dll
+ 75270000 10/29/2014 06:10:02 C:\Windows\SYSTEM32\OLE32.DLL
+ 753D0000 02/12/2015 20:34:08 C:\Windows\SYSTEM32\SHELL32.DLL
+ 76680000 10/29/2014 06:05:16 C:\Windows\SYSTEM32\NSI.dll
+ 76750000 10/29/2014 04:59:50 C:\Windows\system32\IMM32.DLL
+ 76780000 10/29/2014 04:04:36 C:\Windows\SYSTEM32\USER32.DLL
+ 76920000 10/29/2014 04:07:56 C:\Windows\SYSTEM32\RPCRT4.dll
+ 76A90000 10/29/2014 04:10:20 C:\Windows\SYSTEM32\GDI32.DLL
+ 76C30000 10/29/2014 06:18:48 C:\Windows\SYSTEM32\SETUPAPI.dll
+ 76DF0000 10/29/2014 06:06:14 C:\Windows\SYSTEM32\ADVAPI32.DLL
+ 76E70000 12/19/2014 11:25:30 C:\Windows\SYSTEM32\OLEAUT32.DLL
+ 77080000 10/29/2014 06:18:48 C:\Windows\SYSTEM32\cfgmgr32.dll
+ 770C0000 03/24/2015 00:45:06 C:\Windows\SYSTEM32\sechost.dll
+ 77110000 10/29/2014 06:15:34 C:\Windows\SYSTEM32\MSASN1.dll
+ 77120000 10/29/2014 06:10:02 C:\Windows\SYSTEM32\combase.dll
+ 772A0000 10/31/2014 02:38:58 C:\Windows\SYSTEM32\CRYPT32.dll
+ 77430000 10/29/2014 06:10:56 C:\Windows\SYSTEM32\SHLWAPI.dll
+ 77480000 03/14/2015 11:13:52 C:\Windows\SYSTEM32\MSCTF.dll
+ 77680000 03/24/2015 00:59:00 C:\Windows\SYSTEM32\ntdll.dll
+==========================================

@@ -1,0 +1,25 @@
+// ---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <vcl.h>
+#ifndef ConfigUnitH
+#define ConfigUnitH
+// ---------------------------------------------------------------------------
+
+class TDropBoxConf {
+public:
+	static TStringList *__Key;
+	static TStringList *__Value;
+
+	__fastcall TDropBoxConf();
+	static void __fastcall Init();
+	static void __fastcall Add(UnicodeString Key, UnicodeString Value);
+	static UnicodeString __fastcall Get(UnicodeString Key);
+	static void __fastcall Set(UnicodeString Key, UnicodeString Value);
+
+	static void __fastcall LoadDef();
+
+	static void __fastcall SaveToFile(UnicodeString FileName);
+	static void __fastcall LoadFromFile(UnicodeString FileName);
+};
+#endif
+

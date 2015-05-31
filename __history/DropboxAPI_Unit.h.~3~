@@ -1,0 +1,253 @@
+// ---------------------------------------------------------------------------
+
+#ifndef DropboxAPI_UnitH
+#define DropboxAPI_UnitH
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+#include <Vcl.Samples.Gauges.hpp>
+#include <limits.h>
+#include <vector>
+
+// --Oauth2--
+#include <REST.Authenticator.OAuth.WebForm.Win.hpp>
+#include <Data.Bind.Components.hpp>
+#include <Data.Bind.ObjectScope.hpp>
+#include <REST.Authenticator.OAuth.hpp>
+#include <REST.Client.hpp>
+// ---------
+#include <System.JSON.hpp>
+
+#include <IdBaseComponent.hpp>
+#include <IdComponent.hpp>
+#include <IdHTTP.hpp>
+#include <IdTCPClient.hpp>
+#include <IdTCPConnection.hpp>
+#include <IdIOHandler.hpp>
+#include <IdIOHandlerSocket.hpp>
+#include <IdIOHandlerStack.hpp>
+#include <IdSSL.hpp>
+#include <IdSSLOpenSSL.hpp>
+#include <IPPeerClient.hpp>
+
+#include <typeinfo>
+// ---------------------------------------------------------------------------
+
+struct Account_Info {
+	UnicodeString referral_link;
+	UnicodeString display_name;
+	int uid;
+	UnicodeString locale;
+	bool email_verified;
+
+	struct qinfo {
+		float datastores;
+		float shared;
+		float quota;
+		float normal;
+	} quota_info;
+
+	bool is_paired;
+	UnicodeString country;
+
+	struct ndet {
+		UnicodeString familiar_name;
+		UnicodeString surname;
+		UnicodeString given_name;
+	} name_details;
+
+	UnicodeString email;
+
+	__fastcall Account_Info(UnicodeString JSONString);
+	__fastcall Account_Info();
+};
+
+struct content {
+	UnicodeString rev;
+	bool thumb_exists;
+	UnicodeString path;
+	bool is_dir;
+	UnicodeString icon;
+	bool read_only;
+	float bytes;
+	UnicodeString modified;
+	UnicodeString size;
+	UnicodeString root;
+	UnicodeString mime_type;
+	float revision;
+
+	__fastcall content(UnicodeString JSONString);
+	__fastcall content();
+};
+
+struct Metadata {
+	UnicodeString hash;
+	bool thumb_exists;
+	float bytes;
+	UnicodeString path;
+	bool is_dir;
+	UnicodeString icon;
+	UnicodeString root;
+
+	std::vector<content*>(contents);
+
+	UnicodeString size;
+
+	__fastcall Metadata(UnicodeString JSONString);
+	__fastcall Metadata();
+};
+
+enum TReturnValue : unsigned int {
+	rvAinfo, rvMdata, rvSdata, rvContent
+};
+
+enum TSetAction : unsigned int {
+	saAinfo, saMdata, saChAuth, saOpFile, saUpFile
+};
+
+const UnicodeString __TaskName[] = {
+	"Get account info",
+	"Get metadata",
+	"Check access token",
+	"Open file",
+	"Upload file"
+};
+
+struct DataStack {
+	UnicodeString Data[2];
+	TSetAction Action;
+	UnicodeString TaskName;
+
+	TSetAction &operator = ( TSetAction &action ) {
+		Action = action;
+		TaskName = __TaskName[Action];
+		return Action;
+	}
+};
+
+typedef void __fastcall(__closure * TDropboxOnMetadataReady)(Metadata * MData);
+typedef void __fastcall(__closure * TDropboxOnAInfoReady)(Account_Info * AInfo);
+typedef void __fastcall(__closure * TDropboxOnAuthorize)(bool Authorized);
+typedef void __fastcall(__closure * TDropboxOnFileUploaded)(content * Uploaded);
+
+class TGETPUTDataThread : public TThread {
+private:
+	Tfrm_OAuthWebForm *WebForm;
+	TOAuth2Authenticator *OAuth2;
+	TRESTClient *Client;
+	TRESTRequest *Request;
+	TRESTResponse *Response;
+	TIdHTTP *IdHTTP;
+	TGauge *OProgress;
+	TEvent *AddTaskEvent;
+	UnicodeString TempDir;
+	UnicodeString LastPath;
+	bool __isAuthorized;
+	bool __isThreadIdle;
+
+	std::vector<DataStack> Stack;
+
+	TDropboxOnMetadataReady FOnMDataReady;
+	TDropboxOnAInfoReady FOnAInfoReady;
+	TDropboxOnAuthorize FOnAuthorize;
+	TDropboxOnFileUploaded FOnFileUploaded;
+
+	void* __fastcall ResponseProcess(UnicodeString Content,
+		TReturnValue RValue);
+	void __fastcall WebFormOnBeforeRedirect(const System::UnicodeString AURL,
+		bool &DoCloseWebView);
+	void __fastcall AddToStack(UnicodeString Agr1, UnicodeString Agr2, TSetAction Action);
+	void __fastcall RemoveDirectory(UnicodeString dir);
+
+	inline UnicodeString AuthorizeURL(UnicodeString URL) {
+		return (__isAuthorized == true && OAuth2->AccessToken != "") ?
+			URL + "?access_token=" + OAuth2->AccessToken : UnicodeString("");
+	}
+
+	inline bool __fastcall StrToBool(UnicodeString Value) {
+		return Value == "true" ? true : false;
+	}
+
+	// Function's that called only from Execute
+	void __fastcall __GetAccountInfo();
+	void __fastcall __GetMetadata(UnicodeString Path = "");
+	void __fastcall __CheckAuthorize();
+	void __fastcall __UploadFile(UnicodeString SourcePath,
+		UnicodeString DestPath);
+	void __fastcall __OpenFile(UnicodeString Path);
+	// ----------------------------------------
+
+protected:
+	void __fastcall Execute();
+
+	__int64 MaxFileSize;
+	__int64 Downloaded;
+
+	void __fastcall OnWBegin() {
+		if (OProgress != NULL) {
+			OProgress->Visible = true;
+			OProgress->Progress = 0;
+			OProgress->MaxValue = MaxFileSize;
+		}
+	}
+
+	void __fastcall OnWEnd() {
+		if (OProgress != NULL) {
+			OProgress->Progress = MaxFileSize;
+			OProgress->Visible = false;
+		}
+	}
+
+	void __fastcall OnW() {
+		if (OProgress != NULL)
+			OProgress->Progress = Downloaded;
+	}
+
+	inline void __fastcall OnWorkBegin(TObject* ASender, TWorkMode AWorkMode,
+		__int64 AWorkCountMax) {
+		MaxFileSize = AWorkCountMax;
+		Synchronize(OnWBegin);
+	}
+
+	inline void __fastcall OnWorkEnd(TObject* ASender, TWorkMode AWorkMode) {
+		Synchronize(OnWEnd);
+	}
+
+	inline void __fastcall OnWork(TObject* ASender, TWorkMode AWorkMode,
+		__int64 AWorkCount) {
+		Downloaded = AWorkCount;
+		Synchronize(OnW);
+	}
+
+public:
+	void __fastcall Connect();
+	void __fastcall Authorized();
+	void __fastcall GetAccountInfo();
+	void __fastcall GetMetadata(UnicodeString Path = "");
+	void __fastcall OpenFile(UnicodeString Path);
+	void __fastcall UploadFile(UnicodeString SourcePath,
+		UnicodeString DestPath);
+
+	void __fastcall DestroyObject();
+
+	//Set Events
+	__property TDropboxOnMetadataReady OnMDataReady = {
+		read = FOnMDataReady, write = FOnMDataReady};
+	__property TDropboxOnAInfoReady OnAInfoReady = {
+		read = FOnAInfoReady, write = FOnAInfoReady};
+	__property TDropboxOnAuthorize OnAuthorize = {
+		read = FOnAuthorize, write = FOnAuthorize};
+	__property TDropboxOnFileUploaded OnFileUploaded = {
+		read = FOnFileUploaded, write = FOnFileUploaded};
+	//
+	__property TGauge *ProgressDownloading = {write = OProgress};
+
+	__fastcall TGETPUTDataThread();
+	__fastcall ~TGETPUTDataThread();
+};
+
+// ---------------------------------------------------------------------------
+extern TGETPUTDataThread *TAPI;
+// ---------------------------------------------------------------------------
+#endif

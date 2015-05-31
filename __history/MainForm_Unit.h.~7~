@@ -1,0 +1,165 @@
+// ---------------------------------------------------------------------------
+
+#ifndef MainForm_UnitH
+#define MainForm_UnitH
+// ---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Menus.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.ImgList.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
+#include <Vcl.Samples.Gauges.hpp>
+#include <time.h>
+#include "DropboxAPI_Unit.h"
+#include "Log_Unit.h"
+#include "Config_Unit.h"
+#include <System.ImageList.hpp>
+#include <Vcl.Graphics.hpp>
+#include <System.Actions.hpp>
+#include <Vcl.ActnList.hpp>
+#include <Vcl.ActnMan.hpp>
+#include <Vcl.ActnPopup.hpp>
+#include <Vcl.PlatformDefaultStyleActnCtrls.hpp>
+#include <Vcl.Buttons.hpp>
+#include <System.Win.TaskbarCore.hpp>
+#include <Vcl.Taskbar.hpp>
+#include <Vcl.JumpList.hpp>
+#include "SHDocVw_OCX.h"
+#include <Vcl.OleServer.hpp>
+
+// ---------------------------------------------------------------------------
+
+enum TGetValueType : unsigned int {
+	gvtMdata, gvtSearch
+};
+
+class TMainForm : public TForm {
+__published: // IDE-managed Components
+
+	TListView *Lw;
+	TPanel *P_Control;
+	TImageList *IL_MenuIcon;
+	TButtonedEdit *EDT_Search;
+	TImage *BTN_Backward;
+	TLabel *LB_Quota_Info;
+	TLabel *LB_Quota_Size;
+	TGauge *PB;
+	TLabel *LB_Email;
+	TPanel *BTN_Logout;
+	TPanel *Left_P_After_Login;
+	TLabel *LB_Country;
+	TImage *BTN_Forward;
+	TImageList *IL_FileIcon;
+	TImageList *IL_Navigate;
+	TImage *IMG_Dropbox;
+	TImage *BTN_Login;
+	TPanel *P_StatusBar;
+	TLabel *LB_Item_Count;
+	TPanel *Left_P_BeforeAuth;
+	TPanel *BTN_Auth;
+	TImage *IMG_Logo;
+	TGauge *FileDownloadProgress;
+	TPanel *P_PreTopMenu;
+	TPanel *P_TopMenu;
+	TPanel *BTN_MainMenu;
+	TImage *IMG_Help;
+	TImage *BTN_RetHistory;
+	TPanel *BTM_Main;
+	TPanel *BTN_Share;
+	TPanel *BTN_View;
+	TComboBoxEx *EDT_Path;
+	TImageList *IL_UpBtn;
+	TImageList *IL_UpdateBtn;
+	TPopupActionBar *PP_Lw_ActionBar;
+	TMenuItem *N1231;
+	TActionManager *ActionManager1;
+	TMenuItem *N10;
+	TMenuItem *N11;
+	TMenuItem *N12;
+	TMenuItem *N13;
+	TMenuItem *N14;
+	TMenuItem *N15;
+	TMenuItem *N16;
+	TMenuItem *N17;
+	TAction *Open;
+	TAction *Copy;
+	TAction *Delete;
+	TAction *Rename;
+	TSpeedButton *BTN_Up;
+	TPanel *P_BTN_Update;
+	TSpeedButton *BTN_Update;
+	TTrayIcon *TrayIcon;
+	TPanel *Panel1;
+
+	void __fastcall BTN_LogoutMouseEnter(TObject *Sender);
+	void __fastcall LwDblClick(TObject *Sender);
+	void __fastcall BTN_BackwardClick(TObject *Sender);
+	void __fastcall NavigateBTNMouseLeave(TObject *Sender);
+	void __fastcall NavigateBTNMouseEnter(TObject *Sender);
+
+	void __fastcall BTN_AuthClick(TObject *Sender);
+	void __fastcall BTN_LogoutClick(TObject *Sender);
+	void __fastcall EDT_SearchKeyDown(TObject *Sender, WORD &Key,
+		TShiftState Shift);
+	void __fastcall FormDestroy(TObject *Sender);
+	void __fastcall BTM_MainMouseEnter(TObject *Sender);
+	void __fastcall BTM_MainMouseLeave(TObject *Sender);
+	void __fastcall BTN_UpdateClick(TObject *Sender);
+	void __fastcall BTN_UpClick(TObject *Sender);
+	void __fastcall LwMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall OpenExecute(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall LwClick(TObject *Sender);
+	void __fastcall DeleteExecute(TObject *Sender);
+	void __fastcall EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+
+
+private: // User declarations
+	void __fastcall ClosePanel(TPanel* Panel);
+	void __fastcall OpenPanel(TPanel* Panel);
+	void __fastcall OnTimer(TObject *Sender);
+
+	void __fastcall AddItem(Content *Data);
+	void __fastcall RemoveItem(Content *Data);
+	UnicodeString __fastcall ConvertDateTime(UnicodeString DateTime);
+
+	void __fastcall OnAuthorize(bool Authorized);
+	void __fastcall OnMetadataReady(Metadata *Mdata);
+	void __fastcall OnAInfoReady(Account_Info *Ainfo);
+	void __fastcall OnItemAdd(Content * content);
+	void __fastcall OnItemRemove(Content * content);
+	void __fastcall GetIconFile(UnicodeString ext, TImageList *imgList);
+	void __fastcall OnDeauthorize();
+	TIcon* __fastcall GetIcon(UnicodeString ext);
+
+	void __fastcall WmDropFiles(TWMDropFiles& Message);
+
+	void __fastcall UpdateIcon();
+
+	TPanel* TimerP;
+	TStringList *IconList;
+	UnicodeString Last_Hash;
+
+	bool isAuthorized;
+
+	bool __can_forward;
+	bool __can_backward;
+
+	TTimer* Timer;
+
+public: // User declarations
+
+	BEGIN_MESSAGE_MAP MESSAGE_HANDLER(WM_DROPFILES, TWMDropFiles, WmDropFiles)
+		END_MESSAGE_MAP(TForm)
+
+		__fastcall TMainForm(TComponent* Owner);
+};
+
+// ---------------------------------------------------------------------------
+extern PACKAGE TMainForm *MainForm;
+// ---------------------------------------------------------------------------
+#endif

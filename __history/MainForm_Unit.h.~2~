@@ -1,0 +1,124 @@
+// ---------------------------------------------------------------------------
+
+#ifndef MainForm_UnitH
+#define MainForm_UnitH
+// ---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Menus.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.ImgList.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
+#include <Vcl.Samples.Gauges.hpp>
+#include <time.h>
+#include "DropboxAPI_Unit.h"
+#include "Log_Unit.h"
+#include "Config_Unit.h"
+#include <System.ImageList.hpp>
+#include <Vcl.Graphics.hpp>
+
+// ---------------------------------------------------------------------------
+
+enum TGetValueType : unsigned int {
+	gvtMdata, gvtSearch
+};
+
+class TMainForm : public TForm {
+__published: // IDE-managed Components
+
+	TListView *Lw;
+	TPanel *P_Control;
+	TImageList *IL_MenuIcon;
+	TButtonedEdit *EDT_Search;
+	TImage *BTN_Backward;
+	TLabel *LB_Quota_Info;
+	TLabel *LB_Quota_Size;
+	TGauge *PB;
+	TLabel *LB_Email;
+	TPanel *BTN_Logout;
+	TPanel *Left_P_After_Login;
+	TLabel *LB_Country;
+	TImage *BTN_Forward;
+	TImageList *IL_FileIcon;
+	TImageList *IL_Navigate;
+	TImage *IMG_Dropbox;
+	TImage *BTN_Login;
+	TPanel *P_StatusBar;
+	TLabel *LB_Item_Count;
+	TPanel *P_BeforeAuth;
+	TPanel *BTN_Auth;
+	TImage *IMG_Logo;
+	TGauge *FileDownloadProgress;
+	TPanel *P_PreTopMenu;
+	TPanel *P_TopMenu;
+	TPanel *BTN_MainMenu;
+	TImage *IMG_Help;
+	TImage *BTN_RetHistory;
+	TImage *BTN_Up;
+	TImage *BTN_Update;
+	TPanel *BTM_Main;
+	TPanel *BTN_Share;
+	TPanel *BTN_View;
+	TComboBoxEx *EDT_Path;
+	TImageList *IL_UpBtn;
+	TImageList *IL_UpdateBtn;
+
+	void __fastcall BTN_LogoutMouseEnter(TObject *Sender);
+	void __fastcall LwDblClick(TObject *Sender);
+	void __fastcall BTN_BackwardClick(TObject *Sender);
+	void __fastcall NavigateBTNMouseLeave(TObject *Sender);
+	void __fastcall NavigateBTNMouseEnter(TObject *Sender);
+
+	void __fastcall BTN_AuthClick(TObject *Sender);
+	void __fastcall BTN_LogoutClick(TObject *Sender);
+	void __fastcall EDT_SearchKeyDown(TObject *Sender, WORD &Key,
+		TShiftState Shift);
+	void __fastcall FormDestroy(TObject *Sender);
+	void __fastcall BTM_MainMouseEnter(TObject *Sender);
+	void __fastcall BTM_MainMouseLeave(TObject *Sender);
+	void __fastcall BTN_UpdateClick(TObject *Sender);
+	void __fastcall BTN_UpClick(TObject *Sender);
+
+private: // User declarations
+	void __fastcall ClosePanel(TPanel* Panel);
+	void __fastcall OpenPanel(TPanel* Panel);
+	void __fastcall OnTimer(TObject *Sender);
+
+	unsigned int __fastcall AddItem(content *Data);
+	UnicodeString __fastcall ConvertDateTime(UnicodeString DateTime);
+
+	void __fastcall OnAuthorize(bool Authorized);
+	void __fastcall OnMetadataReady(Metadata *Mdata);
+	void __fastcall OnAInfoReady(Account_Info *Ainfo);
+	void __fastcall OnFileUploaded(content * Uploaded);
+	void __fastcall GetIconFile(UnicodeString ext, TImageList *imgList);
+	TIcon* __fastcall GetIcon(UnicodeString ext);
+
+	void __fastcall WmDropFiles(TWMDropFiles& Message);
+
+	void __fastcall UpdateIcon();
+
+	TPanel* TimerP;
+	TStringList *IconList;
+
+	bool isAuthorized;
+
+	bool __can_forward;
+	bool __can_backward;
+
+	TTimer* Timer;
+
+public: // User declarations
+
+	BEGIN_MESSAGE_MAP MESSAGE_HANDLER(WM_DROPFILES, TWMDropFiles, WmDropFiles)
+		END_MESSAGE_MAP(TForm)
+
+		__fastcall TMainForm(TComponent* Owner);
+};
+
+// ---------------------------------------------------------------------------
+extern PACKAGE TMainForm *MainForm;
+// ---------------------------------------------------------------------------
+#endif

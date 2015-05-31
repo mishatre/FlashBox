@@ -1,0 +1,99 @@
+// ---------------------------------------------------------------------------
+
+#pragma hdrstop
+
+#include "Config_Unit.h"
+#include "Log_Unit.h"
+// ---------------------------------------------------------------------------
+#pragma package(smart_init)
+
+TStringList *TDropBoxConf::__Key = new TStringList();
+TStringList *TDropBoxConf::__Value = new TStringList();
+
+// ---------------------------------------------------------------------------
+__fastcall TDropBoxConf::TDropBoxConf() {
+
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TDropBoxConf::Init() {
+	LoadFromFile("ConfFile.conf");
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TDropBoxConf::LoadDef() {
+	__Key->Clear();
+	__Value->Clear();
+	Add("AuthorizeURI", "https://www.dropbox.com/1/oauth2/authorize");
+	Add("InfoURI", "https://api.dropbox.com/1/account/info");
+
+	Add("Disable_AccessURI", "https://api.dropbox.com/1/disable_access_token");
+
+	Add("DownloadFileURI", "https://api-content.dropbox.com/1/files/auto/");
+	Add("UploadFileURI", "https://api-content.dropbox.com/1/files_put/auto/");
+
+	Add("MetadataURI", "https://api.dropbox.com/1/metadata/auto/");
+	Add("SearchURI", "https://api.dropbox.com/1/search/auto/");
+	Add("FileopsURI", "https://api.dropbox.com/1/fileops/copy");
+	Add("CreateFolderURI", "https://api.dropbox.com/1/fileops/create_folder");
+	Add("DeleteURI", "https://api.dropbox.com/1/fileops/delete");
+	Add("MoveURI", "https://api.dropbox.com/1/fileops/move");
+
+	Add("Redirect-Endpoint", "https://ya.ru/");
+	Add("Client-ID", "lybglhu7ccoiplk");
+	Add("Client-Secret", "on2u5qrf5f7dneb");
+	Add("Access-Token","");
+
+	Log::Msg("Load default config", FuncName);
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TDropBoxConf::Add(UnicodeString Key, UnicodeString Value) {
+	__Key->Add(Key);
+	__Value->Add(Value);
+}
+
+// ---------------------------------------------------------------------------
+UnicodeString __fastcall TDropBoxConf::Get(UnicodeString Key) {
+	int n = __Key->IndexOf(Key);
+	if (n != -1)
+		return __Value->Strings[n];
+	return "";
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TDropBoxConf::Set(UnicodeString Key, UnicodeString Value) {
+	int n = __Key->IndexOf(Key);
+	if (n != -1)
+		__Value->Strings[n] = Value;
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TDropBoxConf::SaveToFile(UnicodeString FileName) {
+	FileName = "ConfFile.conf";
+	TFileStream *ConfFile = new TFileStream(FileName, fmCreate | fmOpenWrite);
+	Log::Msg("Save config file", FuncName);
+	__Key->SaveToStream(ConfFile);
+	__Value->SaveToStream(ConfFile);
+	ConfFile->Free();
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TDropBoxConf::LoadFromFile(UnicodeString FileName) {
+	Log::Msg("Load config from file", FuncName);
+	if (FileExists(FileName)) {
+		TFileStream *ConfFile = new TFileStream(FileName, fmOpenReadWrite);
+		__Key->LoadFromStream(ConfFile);
+		__Value->Text = __Key->Text;
+		int Count = __Key->Count;
+		for (int i = 0; i < Count / 2; i++)
+			__Key->Delete((Count / 2));
+		for (int i = 0; i < Count / 2; i++)
+			__Value->Delete(0);
+		ConfFile->Free();
+	}
+	else
+		LoadDef();
+}
+// ---------------------------------------------------------------------------
+
