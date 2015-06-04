@@ -51,7 +51,6 @@ void __fastcall TLog::Msg(Rest::Exception::ERESTException &exception, UnicodeStr
 	}
 }
 
-
 // ---------------------------------------------------------------------------
 void __fastcall TLog::EnableLog() {
 	Enabled = true;

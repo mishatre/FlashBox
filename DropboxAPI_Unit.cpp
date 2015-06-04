@@ -15,6 +15,7 @@ __fastcall TGETPUTDataThread::TGETPUTDataThread() {
 	Log.Msg("Load DropboxAPI", FuncName);
 
 	AddTaskEvent = new TEvent(NULL, false, false, "AddTaskEvent", false);
+	StopThreadEvent = new TEvent(NULL, false, false, "StopThreadEvent", false);
 
 	TempDir  = ExtractFilePath(Application->ExeName) + "temp\\";
 
@@ -110,6 +111,8 @@ void __fastcall TGETPUTDataThread::Execute() {
 				AddTaskEvent->WaitFor(INT_MAX);
 			}
 		}
+        Log.Msg("Terminate thread",FuncName);
+		StopThreadEvent->SetEvent();
 	} catch (System::Sysutils::Exception &exception) {
 		Log.Msg(exception, FuncName);
 	}
@@ -313,7 +316,7 @@ void __fastcall TGETPUTDataThread::DestroyObject() {
 	this->Terminate();
 	AddTaskEvent->SetEvent();
 	AddTaskEvent->Free();
-
+	StopThreadEvent->WaitFor(INT_MAX);
 	WebForm->Free();
 	OAuth2->Free();
 	Client->Free();

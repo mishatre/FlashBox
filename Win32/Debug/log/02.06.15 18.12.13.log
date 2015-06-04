@@ -1,0 +1,13 @@
+18:12:13 - TGETPUTDataThread::TGETPUTDataThread: Load DropboxAPI
+18:12:13 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+18:12:13 - TGETPUTDataThread::Execute: First time start thread
+18:12:13 - TGETPUTDataThread::AddToQueue: Add action to stack: Check access token
+18:12:13 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+18:12:13 - TGETPUTDataThread::Execute: Current task: Check access token
+18:12:13 - TGETPUTDataThread::__CheckAuthorize: Check access token.
+18:12:14 - TGETPUTDataThread::RemoveDirectoryW: Remove temp folder
+18:12:14 - TGETPUTDataThread::__CheckAuthorize: Access token Valid.
+18:12:14 - TGETPUTDataThread::__CheckAuthorize: Call function FOnAuthorize.
+18:12:14 - TGETPUTDataThread::AddToQueue: Add action to stack: Get account info
+18:12:14 - TGETPUTDataThread::AddToQueue: Add action to stack: Get metadata
+18:12:14 - TGETPUTDataThread::Execute: Task Check access token completed

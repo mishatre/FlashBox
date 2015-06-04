@@ -1,0 +1,9 @@
+18:08:39 - TGETPUTDataThread::TGETPUTDataThread: Load DropboxAPI
+18:08:39 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+18:08:39 - TGETPUTDataThread::Execute: First time start thread
+18:08:39 - TGETPUTDataThread::AddToQueue: Add action to stack: Check access token
+18:08:39 - TGETPUTDataThread::CheckInternetConnection: Check internet connection
+18:08:39 - TGETPUTDataThread::Execute: Current task: Check access token
+18:08:39 - TGETPUTDataThread::__CheckAuthorize: Check access token.
+18:08:40 - TGETPUTDataThread::RemoveDirectoryW: Remove temp folder
+Exception!!! 18:08:41 - TGETPUTDataThread::Execute: Access violation at address 00431120 in module 'FlashBox.exe'. Read of address 00000000

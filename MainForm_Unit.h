@@ -114,7 +114,8 @@ __published: // IDE-managed Components
 	void __fastcall NavigateBTNMouseLeave(TObject *Sender);
 	void __fastcall NavigateBTNMouseEnter(TObject *Sender);
 
-	void __fastcall EDT_PathKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall EDT_PathKeyDown(TObject *Sender, WORD &Key,
+		TShiftState Shift);
 	void __fastcall EDT_SearchKeyDown(TObject *Sender, WORD &Key,
 		TShiftState Shift);
 
@@ -122,13 +123,13 @@ __published: // IDE-managed Components
 	void __fastcall DeleteExecute(TObject *Sender);
 
 	void __fastcall LwClick(TObject *Sender);
-	void __fastcall LwDragOver(TObject *Sender, TObject *Source, int X, int Y, TDragState State,
-		  bool &Accept);
+	void __fastcall LwDragOver(TObject *Sender, TObject *Source, int X, int Y,
+		TDragState State, bool &Accept);
 
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
-	void __fastcall LwMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
-          int X, int Y);
+	void __fastcall LwMouseDown(TObject *Sender, TMouseButton Button,
+		TShiftState Shift, int X, int Y);
 
 private: // User declarations
 	void __fastcall ClosePanel(TPanel* Panel);
@@ -168,6 +169,7 @@ private: // User declarations
 	bool __can_backward;
 
 	TTimer* Timer;
+	int Attribute1;
 
 public: // User declarations
 

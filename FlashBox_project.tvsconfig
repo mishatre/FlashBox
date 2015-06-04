@@ -1,2 +1,4 @@
 <?xml version="1.0"?>
-<TgConfig Version="3" SubLevelDisabled="False" />
+<TgConfig Version="3" SubLevelDisabled="False">
+  <Option Name="namespaceFolder.std" Type="System.String" Value="std" Category="General" IsBrowsable="False" />
+</TgConfig>

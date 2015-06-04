@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nodeSet version="1.0">
+  <view uin="v02jbz1pyzl6j2wlo_v">
+    <property name="$defaultDiagram" value="true" />
+    <property name="$metaclass" value="Package Diagram" />
+    <property name="$name" value="default" />
+    <reference referencedUin="cpp:e_class:src:FlashBox:DataQueue">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="220,580,160,120" />
+      <property name="hideOperation" value="True" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:DataQueue.Action" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:DataQueue.TaskName" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:DataQueue.Data" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:DataQueue.operator =(TSetAction&amp;)">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:l_ast:src:FlashBox:DataQueue.Action">
+        <property name="sourceAnchor" value="220,629" />
+        <property name="targetAnchor" value="118,629" />
+        <property name="bendpoints" value="" />
+      </reference>
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TGETPUTDataThread">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="680,240,303,1210" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.ProgressDownloading" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnShowMessage" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnSearchReady" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnDeauthorize" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnItemRemove" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnItemAdd" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnAuthorize" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnAInfoReady" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OnMDataReady" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnSearchReady" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnDeauthorize" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnItemRemove" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnItemAdd" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnAuthorize" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnAInfoReady" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.FOnMDataReady" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Queue" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.option" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Mrews" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Downloaded" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.MaxFileSize" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.__isInternetAvailable" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.__isThreadIdle" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.__isAuthorized" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.LastPath" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.TempDir" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Conf" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.AddTaskEvent" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OProgress" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.IdHTTP" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Response" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Request" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.Client" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.OAuth2" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGETPUTDataThread.WebForm" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.~TGETPUTDataThread()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.TGETPUTDataThread()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.DestroyObject()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.Deauthorize()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.CopyPath(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.MovePath(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.UploadFile(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.DeletePath(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.CreateFolder(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OpenFile(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.GetMetadata(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.Search(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.GetAccountInfo()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.Authorized()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.Connect()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.CheckInternetConnection()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.Execute()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.ShowMessage(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__DisableAccessToken()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__CopyPath(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__MovePath(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__OpenFile(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__UploadFile(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__DeletePath(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__CreateFolder(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__CheckAuthorize()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__Search(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__GetMetadata(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.__GetAccountInfo()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OnWork(::System::TObject*!::Idcomponent::TWorkMode!long long)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OnWorkEnd(::System::TObject*!::Idcomponent::TWorkMode)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OnWorkBegin(::System::TObject*!::Idcomponent::TWorkMode!long long)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OnW()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OnWEnd()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.OnWBegin()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.StrToBool(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.AuthorizeURL(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.WebFormOnBeforeRedirect(::System::UnicodeString!bool&amp;)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.RemoveDirectoryW(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.AddToQueue(::System::UnicodeString!::System::UnicodeString!TSetAction)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TGETPUTDataThread.ResponseProcess(::System::UnicodeString!TReturnValue)" />
+      <reference referencedUin="cpp:l_ast:src:FlashBox:TGETPUTDataThread.Conf">
+        <property name="sourceAnchor" value="830,240" />
+        <property name="targetAnchor" value="830,206" />
+        <property name="bendpoints" value="" />
+      </reference>
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:Metadata">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="60,800,295,220" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.Contents" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.is_dir" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.thumb_exists" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.bytes" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.size" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.root" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.icon" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.path" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Metadata.hash" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:Metadata.Metadata()">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:Metadata.Metadata(::System::UnicodeString!bool)" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TConfFile">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="740,0,180,206" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TConfFile.ConfFileName" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TConfFile.JSONString" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TConfFile.ConfFile" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TConfFile.Data" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TConfFile.~TConfFile()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TConfFile.TConfFile()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TConfFile.Set(::System::UnicodeString!::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TConfFile.Get(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TConfFile.SaveToFile()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TConfFile.LoadDefault()" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:Content">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="20,0,165,300" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.read_only" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.is_dir" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.thumb_exists" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.revision" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.bytes" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.mime_type" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.root" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.size" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.modified" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.icon" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.path" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Content.rev" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:Content.Content()">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:Content.Content(::System::UnicodeString)" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TLog">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="180,320,205,251" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TLog.Enabled" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TLog.FormatSettings" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TLog.MessageStr" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TLog.LogFile" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TLog.LogFileName" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TLog.LogPath" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.~TLog()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.TLog()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.DisableLog()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.EnableLog()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.Msg(TLog::ERESTException&amp;!::System::UnicodeString)">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.Msg(TLog::Exception&amp;!::System::UnicodeString)">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.Msg(::System::UnicodeString!::System::UnicodeString)">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.FormatMessageW(::System::UnicodeString!::System::UnicodeString!int)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.CreateLogFile(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.Msg(::Rest::Exception::ERESTException&amp;!::System::UnicodeString)">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:TLog.Msg(::System::Sysutils::Exception&amp;!::System::UnicodeString)" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:Account_Info">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="200,0,181,300" />
+      <property name="location_set_by_user" value="True" />
+      <property name="bounds_setted_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.name_details" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.quota_info" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.uid" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.is_paired" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.email_verified" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.email" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.country" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.locale" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.display_name" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:Account_Info.referral_link" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:Account_Info.Account_Info()">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_method:src:FlashBox:Account_Info.Account_Info(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_class:src:FlashBox:Account_Info.ndet" />
+      <reference referencedUin="cpp:e_class:src:FlashBox:Account_Info.qinfo" />
+    </reference>
+    <reference referencedUin="design:view:::r8j8kjcuqkp_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="$hidden" value="True" />
+      <property name="bounds" value="240,600,100,89" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_class:src:FlashBox:std.vector&lt;DataQueue,allocator&lt;DataQueue&gt; &gt;" />
+      <reference referencedUin="cpp:e_class:src:FlashBox:std.vector&lt;Content *,allocator&lt;Content *&gt; &gt;" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TReturnValue">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="20,320,94,128" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TReturnValue.rvSearch" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TReturnValue.rvContent" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TReturnValue.rvSdata" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TReturnValue.rvMdata" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TReturnValue.rvAinfo" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TSetAction">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="20,460,98,218" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saSearch" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saDeAuth" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saDeletePath" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saCopyPath" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saMovePath" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saCreateFolder" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saUpFile" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saOpFile" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saChAuth" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saMdata" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TSetAction.saAinfo" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TMainForm">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="400,0,260,1660" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Timer" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.__can_backward" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.__can_forward" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Searched" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.isAuthorized" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Last_Path" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Last_Hash" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.LastMdata" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IconList">
+        <property name="$hidden" value="True" />
+      </reference>
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.TimerP" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N2" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N1" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.PP_Lw_ActionBar_Free" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Panel1" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.TrayIcon" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Update" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.P_BTN_Update" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Up" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Rename" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Delete" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Copy" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Open" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N17" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N16" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N15" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N14" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N13" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N12" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N11" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N10" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.ActionManager" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.N1231" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.PP_Lw_ActionBar" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IL_UpdateBtn" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IL_UpBtn" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.EDT_Path" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_View" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Share" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTM_Main" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_RetHistory" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IMG_Help" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_MainMenu" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.P_TopMenu" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.P_PreTopMenu" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.FileDownloadProgress" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IMG_Logo" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Auth" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Left_P_BeforeAuth" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.LB_Item_Count" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.P_StatusBar" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Login" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IMG_Dropbox" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IL_Navigate" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IL_FileIcon" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Forward" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.LB_Country" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Left_P_After_Login" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Logout" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.LB_Email" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.PB" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.LB_Quota_Size" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.LB_Quota_Info" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.BTN_Backward" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.EDT_Search" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.IL_MenuIcon" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.P_Control" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Lw" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.TMainForm(::System::Classes::TComponent*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.Dispatch(void*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.UpdateIcon()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.WmDropFiles(TMainForm::TWMDropFiles&amp;)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnShowMessage(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.GetIcon(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnDeauthorize()" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.GetIconFile(::System::UnicodeString!::Vcl::Controls::TImageList*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnItemRemove(Content*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnItemAdd(Content*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnAInfoReady(Account_Info*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnSearchReady(Metadata*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnMetadataReady(Metadata*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnAuthorize(bool)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.ConvertDateTime(::System::UnicodeString)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.RemoveItem(Content*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.AddItem(Content*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OnTimer(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OpenPanel(::Vcl::Extctrls::TPanel*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.ClosePanel(::Vcl::Extctrls::TPanel*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.FormDestroy(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.FormShow(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.LwClick(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.DeleteExecute(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.OpenExecute(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.NavigateBTNMouseEnter(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.NavigateBTNMouseLeave(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTN_LogoutClick(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTN_AuthClick(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTN_UpClick(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTN_UpdateClick(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTM_MainMouseLeave(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTM_MainMouseEnter(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTN_BackwardClick(::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.BTN_LogoutMouseEnter(::System::TObject*)" />
+      <reference referencedUin="cpp:l_ast:src:FlashBox:TMainForm.LastMdata">
+        <property name="sourceAnchor" value="400,910" />
+        <property name="targetAnchor" value="355,910" />
+        <property name="bendpoints" value="" />
+      </reference>
+      <reference referencedUin="cpp:e_field:src:FlashBox:TMainForm.Attribute1" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.EDT_PathKeyDown(::System::Classes::TShiftState!::System::TObject*!unsigned short&amp;)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.EDT_SearchKeyDown(::System::Classes::TShiftState!::System::TObject*!unsigned short&amp;)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.LwDragOver(::System::Uitypes::TDragState!bool&amp;!int!int!::System::TObject*!::System::TObject*)" />
+      <reference referencedUin="cpp:e_method:src:FlashBox:TMainForm.LwMouseDown(int!::System::Uitypes::TMouseButton!int!::System::TObject*!::System::Classes::TShiftState)" />
+    </reference>
+    <reference referencedUin="cpp:e_class:src:FlashBox:TGetValueType">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="20,700,104,83" />
+      <property name="location_set_by_user" value="True" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGetValueType.gvtSearch" />
+      <reference referencedUin="cpp:e_field:src:FlashBox:TGetValueType.gvtMdata" />
+    </reference>
+    <reference referencedUin="design:view:::cfxs1fj6muo_v">
+      <property name="$shortcutReference" value="true" />
+      <property name="bounds" value="1040,80,99,42" />
+    </reference>
+  </view>
+</nodeSet>

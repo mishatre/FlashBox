@@ -42,9 +42,9 @@ struct Account_Info {
 	String locale;
 	String country;
 	String email;
-	bool          email_verified;
-	bool          is_paired;
-	int           uid;
+	bool   email_verified;
+	bool   is_paired;
+	int    uid;
 	struct qinfo {
 		float datastores;
 		float shared;
@@ -69,11 +69,11 @@ struct Content {
 	String size;
 	String root;
 	String mime_type;
-	float         bytes;
-	float         revision;
-	bool          thumb_exists;
-	bool          is_dir;
-	bool          read_only;
+	float  bytes;
+	float  revision;
+	bool   thumb_exists;
+	bool   is_dir;
+	bool   read_only;
 
 	__fastcall Content(String JSONString);
 	__fastcall Content();
@@ -85,11 +85,11 @@ struct Metadata {
 	String icon;
 	String root;
 	String size;
-	float         bytes;
-	bool          thumb_exists;
-	bool          is_dir;
+	float  bytes;
+	bool   thumb_exists;
+	bool   is_dir;
 
-	std::vector<Content*>(Contents);
+	std::vector<Content*> Contents;
 
 	__fastcall Metadata(String JSONString, bool OnlyContent = false);
 	__fastcall Metadata();
@@ -150,7 +150,7 @@ typedef void __fastcall(__closure * TDropboxOnItemAdd      )(Content * content  
 typedef void __fastcall(__closure * TDropboxOnItemRemove   )(Content * content   );
 typedef void __fastcall(__closure * TDropboxOnDeauthorize  )(                    );
 typedef void __fastcall(__closure * TDropboxOnSearchReady  )(Metadata * MData    );
-typedef void __fastcall(__closure * TAPIShowMessage        )(String Message);
+typedef void __fastcall(__closure * TAPIShowMessage        )(String Message      );
 
 
 class TGETPUTDataThread : public TThread {
@@ -163,6 +163,7 @@ private:
 	TIdHTTP                *IdHTTP;
 	TGauge                 *OProgress;
 	TEvent                 *AddTaskEvent;
+	TEvent                 *StopThreadEvent;
 	TConfFile               Conf;
 	String           TempDir;
 	String           LastPath;
